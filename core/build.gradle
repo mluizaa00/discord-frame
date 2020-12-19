@@ -10,4 +10,6 @@ dependencies {
     compile "org.java-websocket:Java-WebSocket:1.5.1"
 
     implementation 'org.json:json:20201115'
+    implementation 'org.apache.httpcomponents:httpclient:4.5'
+
 }

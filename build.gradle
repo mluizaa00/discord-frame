@@ -18,6 +18,7 @@ subprojects {
             annotationProcessor 'org.projectlombok:lombok:1.18.16'
 
             annotationProcessor "org.jetbrains:annotations:16.0.1"
+            implementation 'com.googlecode.json-simple:json-simple:1.1.1'
         }
     }
 }
