@@ -6,7 +6,7 @@ import lombok.Getter;
 /**
  @author luiza
  @version-implemented 0.0.1
- @date 12.19.2020
+ @since 12.19.2020
  */
 @Getter
 @AllArgsConstructor

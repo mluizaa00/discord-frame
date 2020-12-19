@@ -1,8 +1,7 @@
 package com.luizaprestes.example;
 
 import com.luizaprestes.wrapper.WrapperClient;
-
-import static com.luizaprestes.wrapper.util.Config.getConfig;
+import static com.luizaprestes.wrapper.util.Config.*;
 
 /**
  @author luiza
@@ -25,6 +24,6 @@ public class ExampleBot {
         System.out.println(bot.getAuthToken());
         System.out.println(bot.getEmail());
         System.out.println(bot.getPassword());
-        System.out.println(bot.getWebSocketClient().isConnected());
+        System.out.println(bot.getWebSocketClient().connected);
     }
 }

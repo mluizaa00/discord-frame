@@ -1,3 +1,4 @@
 rootProject.name = 'discord-wrapper'
 include 'core'
+include 'examples'
 

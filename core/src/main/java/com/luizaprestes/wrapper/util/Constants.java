@@ -9,4 +9,6 @@ public class Constants {
 
     public static final String GATEWAY = DISCORD + "api/gateway";
     public static final String LOGIN = DISCORD + "api/auth/login";
+
+    public static final String ICONS = "https://cdn.discordapp.com/icons/";
 }

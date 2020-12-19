@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.gateway.requests;
+package com.luizaprestes.wrapper.gateway.request;
 
 import lombok.AllArgsConstructor;
 import org.apache.http.HttpEntity;
@@ -15,7 +15,7 @@ import java.lang.reflect.InvocationTargetException;
 /**
  @author luiza
  @version-implemented 0.0.1
- @date 12.19.2020
+ @since 12.19.2020
  */
 @AllArgsConstructor
 public enum RequestType {
