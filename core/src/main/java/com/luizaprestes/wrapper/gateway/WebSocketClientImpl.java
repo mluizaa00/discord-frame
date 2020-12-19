@@ -8,6 +8,11 @@ import org.json.JSONObject;
 
 import java.net.URI;
 
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @date 12.19.2020
+ */
 @Getter
 public class WebSocketClientImpl extends WebSocketClient {
 

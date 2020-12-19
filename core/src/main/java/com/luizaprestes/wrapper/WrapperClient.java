@@ -1,6 +1,6 @@
 package com.luizaprestes.wrapper;
 
-import com.luizaprestes.info.Constants;
+import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
 import com.luizaprestes.wrapper.gateway.requests.RequestType;
 import lombok.Getter;
@@ -12,6 +12,12 @@ import org.json.simple.parser.ParseException;
 
 import java.io.UnsupportedEncodingException;
 
+/**
+    @author luiza
+    @version-implemented 0.0.1
+    @date 11.19.2020
+ */
+
 @Getter
 public class WrapperClient {
 
@@ -19,11 +25,11 @@ public class WrapperClient {
     protected String password;
 
     private String authToken;
-    private String gateway;
+    protected String gateway;
 
     private WebSocketClientImpl webSocketClient;
 
-    private final JSONParser parser;
+    protected final JSONParser parser;
 
     public WrapperClient(String email, String password) {
         this.parser = new JSONParser();
@@ -48,6 +54,7 @@ public class WrapperClient {
             System.out.println("Error while obtaining gateway.");
             exception.printStackTrace();
         }
+
         System.out.println("Obtained gateway: " + gateway);
         return gateway;
     }

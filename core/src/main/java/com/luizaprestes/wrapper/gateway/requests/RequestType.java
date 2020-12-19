@@ -12,6 +12,11 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @date 12.19.2020
+ */
 @AllArgsConstructor
 public enum RequestType {
 

@@ -1,4 +1,4 @@
-package com.luizaprestes.info;
+package com.luizaprestes.wrapper.util;
 
 public class Constants {
 
@@ -7,6 +7,6 @@ public class Constants {
 
     public static final String DISCORD = "https://discordapp.com/";
 
-    public static final String GATEWAY = "https://discordapp.com/api/gateway";
-    public static final String LOGIN = "https://discordapp.com/api/auth/login";
+    public static final String GATEWAY = DISCORD + "api/gateway";
+    public static final String LOGIN = DISCORD + "api/auth/login";
 }
