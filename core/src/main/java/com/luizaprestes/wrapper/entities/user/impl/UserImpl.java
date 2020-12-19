@@ -1,5 +1,7 @@
 package com.luizaprestes.wrapper.entities.user.impl;
 
+import com.luizaprestes.wrapper.entities.channel.PrivateChannel;
+import com.luizaprestes.wrapper.entities.user.model.OnlineStatus;
 import com.luizaprestes.wrapper.entities.user.User;
 import lombok.Data;
 
@@ -11,9 +13,11 @@ import lombok.Data;
 @Data
 public class UserImpl implements User {
 
-    private String id;
+    private final String id;
     private String username;
     private String avatarId;
     private String avatarUrl;
+    private OnlineStatus status = OnlineStatus.ONLINE;
+    private PrivateChannel privateChannel = null;
 
 }

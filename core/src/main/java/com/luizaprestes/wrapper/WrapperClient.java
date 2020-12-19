@@ -1,8 +1,8 @@
 package com.luizaprestes.wrapper;
 
-import com.luizaprestes.wrapper.entities.guild.impl.GuildRegistry;
+import com.luizaprestes.wrapper.entities.guild.GuildRegistry;
 import com.luizaprestes.wrapper.entities.user.SelfInfo;
-import com.luizaprestes.wrapper.entities.user.impl.UserRegistry;
+import com.luizaprestes.wrapper.entities.user.UserRegistry;
 import com.luizaprestes.wrapper.handler.event.ReadyHandler;
 import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
 import com.luizaprestes.wrapper.util.Constants;
@@ -24,7 +24,7 @@ import org.json.simple.parser.ParseException;
 @Getter
 public class WrapperClient {
 
-    protected String email;
+    protected final String email;
     protected String password;
 
     protected String authToken;
@@ -38,6 +38,7 @@ public class WrapperClient {
     private final JSONParser parser;
 
     private final GuildRegistry guildRegistry;
+
     private final UserRegistry userRegistry;
 
     private final ReadyHandler readyHandler;
@@ -92,7 +93,7 @@ public class WrapperClient {
     private String getGateway() {
         try {
             final JSONObject obj = ((JSONObject) parser.parse(RequestType.GET.makeRequest(
-              Constants.GATEWAY, new BasicNameValuePair("authorization", getAuthToken())))
+              Constants.GATEWAY, new BasicNameValuePair("authorization", authToken)))
             );
 
             return ((String) obj.get("url")).replaceAll("wss", "ws");

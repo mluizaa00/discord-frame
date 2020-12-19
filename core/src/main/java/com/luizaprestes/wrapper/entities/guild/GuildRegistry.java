@@ -1,6 +1,4 @@
-package com.luizaprestes.wrapper.entities.guild.impl;
-
-import com.luizaprestes.wrapper.entities.guild.Guild;
+package com.luizaprestes.wrapper.entities.guild;
 
 import java.util.Collection;
 import java.util.HashMap;
@@ -21,11 +19,12 @@ public class GuildRegistry {
         return guilds.get(guildId);
     }
 
-    public void cleanup(final String guildId) {
+    public void remove(final String guildId) {
         guilds.remove(guildId);
     }
 
     public Collection<Guild> getAll() {
         return guilds.values();
     }
+
 }

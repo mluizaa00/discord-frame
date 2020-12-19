@@ -2,19 +2,28 @@ package com.luizaprestes.wrapper.entities.guild.impl;
 
 import com.luizaprestes.wrapper.entities.channel.TextChannel;
 import com.luizaprestes.wrapper.entities.channel.VoiceChannel;
+import com.luizaprestes.wrapper.entities.channel.registry.TextChannelRegistry;
+import com.luizaprestes.wrapper.entities.channel.registry.VoiceChannelRegistry;
 import com.luizaprestes.wrapper.entities.guild.Guild;
-import com.luizaprestes.wrapper.entities.guild.Region;
+import com.luizaprestes.wrapper.entities.guild.RoleRegistry;
+import com.luizaprestes.wrapper.entities.guild.model.Region;
 
+import com.luizaprestes.wrapper.entities.guild.model.Role;
 import com.luizaprestes.wrapper.util.Constants;
 import lombok.Data;
 
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @since 12.19.2020
+ */
 @Data
 public class GuildImpl implements Guild {
 
-    private String id;
+    private final String id;
     private String name;
 
     private String iconId;
@@ -27,8 +36,9 @@ public class GuildImpl implements Guild {
 
     private Region region;
 
-    private List<TextChannel> textChannels = new ArrayList<>();
-    private List<VoiceChannel> voiceChannels = new ArrayList<>();
+    private TextChannelRegistry textChannels = new TextChannelRegistry();
+    private VoiceChannelRegistry voiceChannels = new VoiceChannelRegistry();
+    private RoleRegistry roles = new RoleRegistry();
 
     @Override
     public String getIconId() {
@@ -36,18 +46,20 @@ public class GuildImpl implements Guild {
     }
 
     @Override
-    public List<TextChannel> getTextChannels() {
-        return List.copyOf(textChannels);
-    }
-
-    @Override
-    public List<VoiceChannel> getVoiceChannels() {
-        return List.copyOf(voiceChannels);
-    }
-
-    @Override
     public String afkChannelId() {
         return afkChannelId;
+    }
+
+    public List<TextChannel> getTextList() {
+        return new ArrayList<>(textChannels.getAll());
+    }
+
+    public List<VoiceChannel> getVoiceList() {
+        return new ArrayList<>(voiceChannels.getAll());
+    }
+
+    public List<Role> getRolesList() {
+        return new ArrayList<>(roles.getAll());
     }
 
 }

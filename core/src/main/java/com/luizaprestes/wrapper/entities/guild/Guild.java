@@ -2,6 +2,10 @@ package com.luizaprestes.wrapper.entities.guild;
 
 import com.luizaprestes.wrapper.entities.channel.TextChannel;
 import com.luizaprestes.wrapper.entities.channel.VoiceChannel;
+import com.luizaprestes.wrapper.entities.channel.registry.TextChannelRegistry;
+import com.luizaprestes.wrapper.entities.channel.registry.VoiceChannelRegistry;
+import com.luizaprestes.wrapper.entities.guild.model.Region;
+import com.luizaprestes.wrapper.entities.guild.model.Role;
 
 import java.util.List;
 
@@ -28,7 +32,9 @@ public interface Guild {
 
     Region getRegion();
 
-    List<TextChannel> getTextChannels();
+    TextChannelRegistry getTextChannels();
 
-    List<VoiceChannel> getVoiceChannels();
+    VoiceChannelRegistry getVoiceChannels();
+
+    RoleRegistry getRoles();
 }

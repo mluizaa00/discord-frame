@@ -11,19 +11,20 @@ import static com.luizaprestes.wrapper.util.Config.*;
 public class ExampleBot {
 
     public static void main(String[] args) {
-        WrapperClient bot = new WrapperClient(
+        final WrapperClient client = new WrapperClient(
           getConfig().getString("email"),
           getConfig().getString("password")
         );
 
-        bot.login();
+        client.login();
 
         /*
         SIMPLE DEBUG
          */
-        System.out.println(bot.getAuthToken());
-        System.out.println(bot.getEmail());
-        System.out.println(bot.getPassword());
-        System.out.println(bot.getWebSocketClient().connected);
+        System.out.println(client.getAuthToken());
+        System.out.println(client.getEmail());
+        System.out.println(client.getPassword());
+        System.out.println(client.getWebSocketClient().connected);
     }
+
 }

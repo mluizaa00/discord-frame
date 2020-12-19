@@ -7,6 +7,11 @@ import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @since 12.19.2020
+ */
 public class ReadyHandler implements ISocketHandler {
 
     private final WrapperClient client;

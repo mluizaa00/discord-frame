@@ -1,10 +1,13 @@
-package com.luizaprestes.wrapper.entities.user.impl;
-
-import com.luizaprestes.wrapper.entities.user.User;
+package com.luizaprestes.wrapper.entities.user;
 
 import java.util.Collection;
 import java.util.HashMap;
 
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @since 12.19.2020
+ */
 public class UserRegistry {
 
     private final HashMap<String, User> users;
@@ -21,7 +24,7 @@ public class UserRegistry {
         return users.get(userId);
     }
 
-    public void cleanup(final String userId) {
+    public void remove(final String userId) {
         users.remove(userId);
     }
 

@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.entities.guild;
+package com.luizaprestes.wrapper.entities.guild.model;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

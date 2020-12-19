@@ -1,6 +1,9 @@
 package com.luizaprestes.wrapper.entities.channel;
 
 import com.luizaprestes.wrapper.entities.guild.Guild;
+import com.luizaprestes.wrapper.entities.user.User;
+
+import java.util.List;
 
 /**
  @author luiza
@@ -13,8 +16,8 @@ public interface Channel {
 
     String getName();
 
-    String getTopic();
-
     Guild getGuild();
+
+    List<User> getUsers();
 
 }
