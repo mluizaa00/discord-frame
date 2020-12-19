@@ -1,0 +1,19 @@
+# gradle
+**/build/
+/.gradle/
+/gradle.properties
+
+# project files
+config.json
+
+# eclipse files
+.classpath
+.project
+.settings/
+/bin/
+
+# intellij files
+/.idea/
+*.iml
+*.ipr
+*.iws

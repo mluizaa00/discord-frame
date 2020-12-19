@@ -1,0 +1,27 @@
+plugins {
+    id 'java'
+    id "com.github.johnrengelman.shadow" version "5.1.0"
+}
+
+group 'com.luizaprestes'
+version '0.0.1-SNAPSHOT'
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+subprojects {
+    afterEvaluate {
+        dependencies {
+            compileOnly 'org.projectlombok:lombok:1.18.16'
+            annotationProcessor 'org.projectlombok:lombok:1.18.16'
+
+            annotationProcessor "org.jetbrains:annotations:16.0.1"
+        }
+    }
+}
+
+tasks.withType(JavaCompile) {
+    options.encoding = "UTF-8"
+}
