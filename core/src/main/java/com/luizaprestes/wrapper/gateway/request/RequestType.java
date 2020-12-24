@@ -1,89 +1,55 @@
 package com.luizaprestes.wrapper.gateway.request;
 
 import lombok.AllArgsConstructor;
-import org.apache.http.HttpEntity;
-import org.apache.http.HttpException;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.HttpClient;
-import org.apache.http.client.methods.*;
-import org.apache.http.impl.client.HttpClients;
-import org.apache.http.message.BasicNameValuePair;
-import org.apache.http.util.EntityUtils;
+import okhttp3.*;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
 
 import java.io.IOException;
-import java.lang.reflect.InvocationTargetException;
 
 @AllArgsConstructor
-public enum RequestType {
+public class RequestType {
 
-    POST (HttpPost.class),
-    GET (HttpGet.class),
-    DELETE (HttpDelete.class),
-    PATCH (HttpPatch.class);
+    protected static final OkHttpClient client = new OkHttpClient();
 
-    static final HttpClient CLIENT = HttpClients.createDefault();
+    protected static  final JSONParser parser = new JSONParser();
 
-    final Class<? extends HttpUriRequest> requestClass;
+    public static String makePostRequest(String url, String content, String value) {
+        final MediaType JSON = MediaType.get("application/json; charset=utf-8");
+        final RequestBody body = RequestBody.create(content, JSON);
 
-    public String makeRequest(String url, BasicNameValuePair... headers) {
-        try {
-            final HttpUriRequest request = this.requestClass.getConstructor(String.class).newInstance(url);
+        final Request request = new Request.Builder()
+          .url(url)
+          .post(body)
+          .build();
 
-            for (BasicNameValuePair header : headers) {
-                request.addHeader(header.getName(), header.getValue());
-            }
+        try (Response response = client.newCall(request).execute()) {
+            System.out.println(response.toString());
 
-            final HttpResponse response = CLIENT.execute(request);
-            return responseMethod(response, url);
-        } catch (
-          Exception exception
-        ) {
-            exception.printStackTrace();
-            return null;
-        }
-    }
-
-    public String makeRequest(String url, HttpEntity entity, BasicNameValuePair... headers) {
-        try {
-            if (
-              HttpEntityEnclosingRequestBase.class.isAssignableFrom(this.requestClass)
-            ) {
-                final HttpEntityEnclosingRequestBase request = (HttpEntityEnclosingRequestBase)
-                  this.requestClass.getConstructor(String.class).newInstance(url);
-
-                for (BasicNameValuePair header : headers) {
-                    request.addHeader(header.getName(), header.getValue());
-                }
-
-                request.setEntity(entity);
-
-                final HttpResponse response = CLIENT.execute(request);
-                return responseMethod(response, url);
-            } else {
-                System.out.println("Tried to attach HTTP to invalid type");
-            }
-        } catch (
-          Exception exception
-        ) {
+            final JSONObject obj = (JSONObject) parser.parse(String.valueOf(response));
+            return (String) obj.get(value);
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
         return null;
     }
 
-    private String responseMethod(final  HttpResponse response, String url) throws IOException {
-        final int responseCode = response.getStatusLine().getStatusCode();
+    public static String makeGetRequest(String url, String value, String token) {
+        final Request request = new Request.Builder()
+          .url(url)
+          .addHeader("content-type", "application/json")
+          .addHeader("authorization", token)
+          .build();
 
-        switch (responseCode) {
-            case 404:
-                System.out.println("Not found.");
-            case 403:
-                System.out.println("Unable to make request to " + url);
-            case 502:
-                System.out.println("Gateway unavailable.");
-            case 204:
-                return null;
+        try (Response response = client.newCall(request).execute()) {
+            System.out.println(response.toString());
+
+            final JSONObject obj = (JSONObject) parser.parse(String.valueOf(response));
+            return (String) obj.get(value);
+        } catch (Exception exception) {
+            exception.printStackTrace();
         }
-
-        return EntityUtils.toString(response.getEntity());
+        return null;
     }
+
 }

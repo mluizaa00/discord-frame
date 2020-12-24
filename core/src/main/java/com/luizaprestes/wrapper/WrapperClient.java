@@ -4,18 +4,13 @@ import com.luizaprestes.wrapper.entities.guild.GuildRegistry;
 import com.luizaprestes.wrapper.entities.user.SelfInfo;
 import com.luizaprestes.wrapper.entities.user.UserRegistry;
 import com.luizaprestes.wrapper.event.client.EventClient;
-import com.luizaprestes.wrapper.handler.impl.ReadyHandler;
 import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
 import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
 import com.luizaprestes.wrapper.gateway.request.RequestType;
 import lombok.Getter;
 import lombok.Setter;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.message.BasicNameValuePair;
-import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
-import org.json.simple.parser.ParseException;
 
 /**
     @author luiza
@@ -75,32 +70,16 @@ public class WrapperClient {
     }
 
     private String getToken() {
-        try {
-            final JSONObject obj = ((JSONObject) parser.parse(RequestType.POST.makeRequest(
-                Constants.LOGIN,
-                new StringEntity("{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}"),
-                new BasicNameValuePair("content-type", "application/json")))
-            );
-
-            return (String) obj.get("token");
-        } catch (Exception exception) {
-            System.out.println("Error while trying to get token.");
-            exception.printStackTrace();
-        }
-        return null;
+        return RequestType.makePostRequest(
+          Constants.LOGIN,
+          "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}",
+          "token"
+        );
     }
 
     private String getGateway() {
-        try {
-            final JSONObject obj = ((JSONObject) parser.parse(RequestType.GET.makeRequest(
-              Constants.GATEWAY, new BasicNameValuePair("authorization", authToken)))
-            );
-
-            return ((String) obj.get("url")).replaceAll("wss", "ws");
-        } catch (ParseException exception) {
-            System.out.println("Error while trying to get gateway.");
-            exception.printStackTrace();
-        }
-        return null;
+        return RequestType.makeGetRequest(
+          Constants.GATEWAY, "url", authToken
+        );
     }
 }

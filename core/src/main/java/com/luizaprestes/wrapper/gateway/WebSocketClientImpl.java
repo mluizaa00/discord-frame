@@ -23,13 +23,17 @@ public class WebSocketClientImpl extends WebSocketClient {
 
     public WebSocketClientImpl(String url, WrapperClient api) {
         super(URI.create(url.replace("wss", "ws")));
+
         this.client = api;
         this.connect();
     }
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        if (client.getAuthToken().isEmpty()) {
+        if (
+          client.getAuthToken().isEmpty() ||
+            client.getAuthToken() == null
+        ) {
             System.out.println("Token not registered.");
         }
 
@@ -44,6 +48,7 @@ public class WebSocketClientImpl extends WebSocketClient {
               .put("$device", "Java Discord Wrapper")
             )
             .put("v", 8));
+
         send(connectObj.toString());
 
         this.connected = true;
