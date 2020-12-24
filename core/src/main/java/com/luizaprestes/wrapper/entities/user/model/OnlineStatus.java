@@ -11,7 +11,9 @@ import lombok.AllArgsConstructor;
 public enum OnlineStatus {
 
     ONLINE("online"),
-    AWAY("away"),
+    DO_NOT_DISTURB("dnd"),
+    AWAY("idle"),
+    INVISIBLE("invisible"),
     OFFLINE("offline");
 
     private final String key;

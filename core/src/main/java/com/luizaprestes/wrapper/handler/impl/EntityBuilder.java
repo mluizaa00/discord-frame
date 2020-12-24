@@ -1,7 +1,7 @@
 package com.luizaprestes.wrapper.handler.impl;
 
 import com.luizaprestes.wrapper.WrapperClient;
-import com.luizaprestes.wrapper.entities.IEntity;
+import com.luizaprestes.wrapper.handler.IEntity;
 import com.luizaprestes.wrapper.entities.channel.PrivateChannel;
 import com.luizaprestes.wrapper.entities.channel.TextChannel;
 import com.luizaprestes.wrapper.entities.channel.VoiceChannel;
@@ -93,8 +93,8 @@ public class EntityBuilder implements IEntity {
         }
 
         selfInfo.setVerified(context.getBoolean("verified"));
-        selfInfo.setUsername(context.getString("username"));
         selfInfo.setEmail(context.getString("email"));
+        selfInfo.setUsername(context.getString("username"));
         selfInfo.setAvatarId(context.getString("avatar"));
 
         return selfInfo;

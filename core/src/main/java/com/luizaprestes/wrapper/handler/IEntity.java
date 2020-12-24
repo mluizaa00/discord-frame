@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.entities;
+package com.luizaprestes.wrapper.handler;
 
 import com.luizaprestes.wrapper.entities.channel.PrivateChannel;
 import com.luizaprestes.wrapper.entities.channel.TextChannel;
@@ -10,11 +10,6 @@ import com.luizaprestes.wrapper.entities.user.SelfInfo;
 import com.luizaprestes.wrapper.entities.user.User;
 import org.json.JSONObject;
 
-/**
- @author luiza
- @version-implemented 0.0.1
- @since 12.19.2020
- */
 public interface IEntity {
 
     Guild createGuild(JSONObject context);

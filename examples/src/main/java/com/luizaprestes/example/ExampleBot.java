@@ -1,6 +1,7 @@
 package com.luizaprestes.example;
 
 import com.luizaprestes.wrapper.WrapperClient;
+
 import static com.luizaprestes.wrapper.util.Config.*;
 
 /**

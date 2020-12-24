@@ -3,7 +3,8 @@ package com.luizaprestes.wrapper;
 import com.luizaprestes.wrapper.entities.guild.GuildRegistry;
 import com.luizaprestes.wrapper.entities.user.SelfInfo;
 import com.luizaprestes.wrapper.entities.user.UserRegistry;
-import com.luizaprestes.wrapper.handler.event.ReadyHandler;
+import com.luizaprestes.wrapper.event.client.EventClient;
+import com.luizaprestes.wrapper.handler.impl.ReadyHandler;
 import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
 import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
@@ -38,12 +39,11 @@ public class WrapperClient {
     private final JSONParser parser;
 
     private final GuildRegistry guildRegistry;
-
     private final UserRegistry userRegistry;
 
-    private final ReadyHandler readyHandler;
-
     private final EntityBuilder entityBuilder;
+
+    private final EventClient eventClient;
 
     /**
      * Client loader
@@ -58,7 +58,7 @@ public class WrapperClient {
         this.guildRegistry = new GuildRegistry();
         this.userRegistry = new UserRegistry();
 
-        this.readyHandler = new ReadyHandler(this, entityBuilder);
+        this.eventClient = new EventClient(this);
 
     }
 

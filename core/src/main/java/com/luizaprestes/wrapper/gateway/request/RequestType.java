@@ -2,6 +2,7 @@ package com.luizaprestes.wrapper.gateway.request;
 
 import lombok.AllArgsConstructor;
 import org.apache.http.HttpEntity;
+import org.apache.http.HttpException;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.*;
@@ -12,11 +13,6 @@ import org.apache.http.util.EntityUtils;
 import java.io.IOException;
 import java.lang.reflect.InvocationTargetException;
 
-/**
- @author luiza
- @version-implemented 0.0.1
- @since 12.19.2020
- */
 @AllArgsConstructor
 public enum RequestType {
 
@@ -40,8 +36,7 @@ public enum RequestType {
             final HttpResponse response = CLIENT.execute(request);
             return responseMethod(response, url);
         } catch (
-          IOException | NoSuchMethodException | IllegalAccessException |
-            InvocationTargetException | InstantiationException exception
+          Exception exception
         ) {
             exception.printStackTrace();
             return null;
@@ -68,8 +63,7 @@ public enum RequestType {
                 System.out.println("Tried to attach HTTP to invalid type");
             }
         } catch (
-          IOException | NoSuchMethodException | IllegalAccessException |
-            InvocationTargetException | InstantiationException exception
+          Exception exception
         ) {
             exception.printStackTrace();
         }

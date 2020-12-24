@@ -3,11 +3,6 @@ package com.luizaprestes.wrapper.entities.user;
 import com.luizaprestes.wrapper.entities.channel.PrivateChannel;
 import com.luizaprestes.wrapper.entities.user.model.OnlineStatus;
 
-/**
- @author luiza
- @version-implemented 0.0.1
- @since 12.19.2020
- */
 public interface User {
 
     String getId();
@@ -16,7 +11,7 @@ public interface User {
 
     String getAvatarId();
 
-    String getAvatarUrl();
+    String getAvatarURL();
 
     OnlineStatus getStatus();
 

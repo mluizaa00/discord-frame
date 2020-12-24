@@ -62,7 +62,7 @@ public class WebSocketClientImpl extends WebSocketClient {
             case "READY": {
                 System.out.println("DISCORD WRAPPER IS READY!");
 
-                client.getReadyHandler().handle(content);
+                client.getEventClient().getReadyHandler().handle(content);
                 keepAliveInterval = content.getLong("heartbeat_interval");
 
                 new Thread(() -> {
