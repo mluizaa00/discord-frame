@@ -93,9 +93,9 @@ public class EntityBuilder implements IEntity {
         }
 
         selfInfo.setVerified(context.getBoolean("verified"));
-        selfInfo.setEmail(context.getString("email"));
         selfInfo.setUsername(context.getString("username"));
-        selfInfo.setAvatarId(context.getString("avatar"));
+
+        selfInfo.setAvatarId(context.isNull("avatar") ? null : context.getString("avatar"));
 
         return selfInfo;
     }
@@ -128,7 +128,8 @@ public class EntityBuilder implements IEntity {
         }
 
         channel.setName(context.getString("name"));
-        channel.setTopic(context.getString("topic"));
+
+        channel.setTopic(context.isNull("topic") ? null : context.getString("topic"));
         channel.setPosition(context.getInt("position"));
 
         return channel;

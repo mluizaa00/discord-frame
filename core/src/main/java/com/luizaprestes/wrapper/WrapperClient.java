@@ -12,6 +12,7 @@ import lombok.Getter;
 import lombok.Setter;
 import org.json.simple.parser.JSONParser;
 
+
 /**
     @author luiza
     @version-implemented 0.0.1
@@ -20,16 +21,15 @@ import org.json.simple.parser.JSONParser;
 @Getter
 public class WrapperClient {
 
-    protected final String email;
-    protected String password;
+    protected final String gateway = Constants.GATEWAY;
 
-    protected String authToken;
-    protected String gateway;
-
+    protected RequestType requestType;
     protected WebSocketClientImpl webSocketClient;
 
     @Setter
     protected SelfInfo selfInfo;
+
+    private final String authToken;
 
     private final JSONParser parser;
 
@@ -43,43 +43,21 @@ public class WrapperClient {
     /**
      * Client loader
      */
-    public WrapperClient(String email, String password) {
+    public WrapperClient(String token) {
         this.parser = new JSONParser();
         this.entityBuilder = new EntityBuilder(this);
 
-        this.email = email;
-        this.password = password;
-
         this.guildRegistry = new GuildRegistry();
         this.userRegistry = new UserRegistry();
+
+        this.authToken = token;
 
         this.eventClient = new EventClient(this);
 
     }
 
     public void login() {
-        this.authToken = getToken();
-        this.webSocketClient = new WebSocketClientImpl(obtainGateway(), this);
+        this.webSocketClient = new WebSocketClientImpl(gateway, this);
     }
 
-    private String obtainGateway() {
-        this.gateway = getGateway();
-
-        System.out.println("Obtained gateway: " + gateway);
-        return gateway;
-    }
-
-    private String getToken() {
-        return RequestType.makePostRequest(
-          Constants.LOGIN,
-          "{\"email\":\"" + email + "\",\"password\":\"" + password + "\"}",
-          "token"
-        );
-    }
-
-    private String getGateway() {
-        return RequestType.makeGetRequest(
-          Constants.GATEWAY, "url", authToken
-        );
-    }
 }

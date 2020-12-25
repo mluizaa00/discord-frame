@@ -31,7 +31,6 @@ public class SelfInfoImpl implements SelfInfo {
     private PrivateChannel privateChannel;
 
     private boolean verified;
-    private String email;
     private List<TextChannel> mutedChannels;
 
     @Override

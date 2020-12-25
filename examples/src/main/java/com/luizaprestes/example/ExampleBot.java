@@ -13,22 +13,10 @@ public class ExampleBot {
 
     public static void main(String[] args) {
         final WrapperClient client = new WrapperClient(
-          getConfig().getString("email"),
-          getConfig().getString("password")
+          getConfig().getString("token")
         );
 
         client.login();
-
-        /*
-        SIMPLE DEBUG
-         */
-        System.out.println("Token: " + client.getAuthToken());
-        System.out.println("Email: " + client.getEmail());
-        System.out.println("Password: " + client.getPassword());
-        System.out.println("Connected: " + client.getWebSocketClient().connected);
-
-        System.out.println("Heartbeat interval: " + client.getWebSocketClient().getKeepAliveInterval());
-        System.out.println("URI: " + client.getWebSocketClient().getURI().toString());
     }
 
 }

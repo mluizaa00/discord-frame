@@ -6,6 +6,7 @@ import com.luizaprestes.wrapper.entities.guild.Guild;
 import com.luizaprestes.wrapper.entities.user.impl.SelfInfoImpl;
 import com.luizaprestes.wrapper.event.listener.ReadyEvent;
 import com.luizaprestes.wrapper.handler.ISocketHandler;
+import com.luizaprestes.wrapper.util.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
@@ -22,6 +23,8 @@ public class ReadyHandler implements ISocketHandler {
     private final WrapperClient client;
     private final EntityBuilder builder;
 
+    private final Logger logger = new Logger(ReadyHandler.class, false);
+
     public ReadyHandler(WrapperClient client, EntityBuilder builder) {
         this.client = client;
         this.builder = builder;
@@ -33,8 +36,8 @@ public class ReadyHandler implements ISocketHandler {
 
         final List<TextChannel> mutedChannels = new ArrayList<>();
 
-        final JSONArray guilds = context.getJSONArray("guilds");
-        final JSONArray muted = context.getJSONObject("user_settings").getJSONArray("muted_channels");
+        final JSONArray guilds = context.isNull("guilds") ? null : context.getJSONArray("guilds");
+        final JSONArray muted = context.isNull("muted_channels") ? null : context.getJSONObject("user_settings").getJSONArray("muted_channels");
 
         for (int i = 0; i < guilds.length(); i++) {
             final Guild guild = builder.createGuild(guilds.getJSONObject(i));
@@ -53,7 +56,7 @@ public class ReadyHandler implements ISocketHandler {
         }
 
         client.getEventClient().handle(new ReadyEvent());
-        System.out.println("ReadyHandler was loaded.");
+        logger.debug("ReadyHandler was loaded.");
     }
 
 }

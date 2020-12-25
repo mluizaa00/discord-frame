@@ -1,6 +1,7 @@
 package com.luizaprestes.wrapper.gateway;
 
 import com.luizaprestes.wrapper.WrapperClient;
+import com.luizaprestes.wrapper.util.Logger;
 import lombok.Getter;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -21,22 +22,17 @@ public class WebSocketClientImpl extends WebSocketClient {
     protected WrapperClient client;
     protected long keepAliveInterval;
 
-    public WebSocketClientImpl(String url, WrapperClient api) {
-        super(URI.create(url.replace("wss", "ws")));
+    protected final Logger logger = new Logger(WebSocketClientImpl.class, false);
 
-        this.client = api;
+    public WebSocketClientImpl(String url, WrapperClient client) {
+        super(URI.create(url));
+
+        this.client = client;
         this.connect();
     }
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        if (
-          client.getAuthToken().isEmpty() ||
-            client.getAuthToken() == null
-        ) {
-            System.out.println("Token not registered.");
-        }
-
         final JSONObject connectObj = new JSONObject()
           .put("op", 2)
           .put("d", new JSONObject()
@@ -52,46 +48,107 @@ public class WebSocketClientImpl extends WebSocketClient {
         send(connectObj.toString());
 
         this.connected = true;
+
+        sendUpdates();
     }
 
     @Override
     public void onMessage(String context) {
-        System.out.println(context);
+        final JSONObject contextObj = new JSONObject(context);
+        final JSONObject content = contextObj.isNull("d") ? null : contextObj.getJSONObject("d");
 
-        JSONObject content = new JSONObject(context);
+        final int opCode = contextObj.getInt("op");
+        if (opCode == OpCodes.HELLO.getCode()) {
+            assert content != null;
+            this.keepAliveInterval = content.getInt("heartbeat_interval");
+            logger.debug(context);
+        }
 
-        final String type = content.getString("t");
-        content = content.getJSONObject("d");
+        String type = null;
+        if (opCode == OpCodes.DISPATCH.getCode()) {
+            type = contextObj.getString("t");
+            logger.debug(context);
+        }
 
-        switch (type) {
-            case "READY": {
-                System.out.println("DISCORD WRAPPER IS READY!");
+        if (type != null) {
+            switch (type) {
+                case "READY": {
+                    client.getEventClient().getReadyHandler().handle(content);
 
-                client.getEventClient().getReadyHandler().handle(content);
-                keepAliveInterval = content.getLong("heartbeat_interval");
-
-                new Thread(() -> {
-                    while (!getConnection().isClosed()) {
-                        send(new JSONObject().put("op", 1).put("d", System.currentTimeMillis()).toString());
-
-                        try {
-                            Thread.sleep(keepAliveInterval);
-                        } catch (InterruptedException e) {
-                            e.printStackTrace();
-                            System.exit(0);
-                        }
-                    }
-                }).start();
+                    keepAlive();
+                    logger.info("Discord Java Wrapper is ready.");
+                    break;
+                }
+                default: {
+                    break;
+                }
             }
         }
+
+    }
+
+    public void sendUpdates() {
+        final Thread updates = new Thread("Updates") {
+
+            @Override
+            public void run() {
+                try {
+                    while (this.isAlive() && !this.isInterrupted()) {
+                        logger.debug("Connected: " + connected);
+                        logger.debug("Heartbeat interval: " + keepAliveInterval);
+                        logger.debug("URI: " + uri.toString());
+                        Thread.sleep(60000);
+                    }
+
+                    Thread.sleep(60000);
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
+
+                    logger.error("The thread: Updates, has been interrupted");
+                    System.exit(0);
+                }
+            }
+        };
+
+        updates.start();
+    }
+
+    public void keepAlive() {
+        final Thread heartbeatThread = new Thread("Heartbeat") {
+
+            @Override
+            public void run() {
+                try {
+                    while (this.isAlive() && !this.isInterrupted()) {
+                        send(
+                          new JSONObject()
+                            .put("op", OpCodes.HEARTBEAT.getCode())
+                            .put("d", System.currentTimeMillis()).toString()
+                        );
+                        Thread.sleep(keepAliveInterval);
+                    }
+
+                    Thread.sleep(keepAliveInterval);
+                } catch (InterruptedException exception) {
+                    exception.printStackTrace();
+
+                    logger.error("The thread: Heartbeat, has been interrupted");
+                    System.exit(0);
+                }
+            }
+        };
+
+        heartbeatThread.setPriority((Thread.NORM_PRIORITY + Thread.MAX_PRIORITY) / 2);
+        heartbeatThread.setDaemon(true);
+        heartbeatThread.start();
     }
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        System.out.println("The connection was closed!");
-        System.out.println("By remote? " + remote);
-        System.out.println("Reason: " + reason);
-        System.out.println("Close code: " + code);
+        logger.error("The connection was closed!");
+        logger.error("By remote? " + remote);
+        logger.error("Reason: " + reason);
+        logger.error("Close code: " + code);
 
         this.connected = false;
     }
@@ -100,4 +157,5 @@ public class WebSocketClientImpl extends WebSocketClient {
     public void onError(Exception exception) {
         exception.printStackTrace();
     }
+
 }

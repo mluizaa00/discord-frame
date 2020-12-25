@@ -22,9 +22,6 @@ public class Config {
             try {
                 Files.write(Paths.get(config.getPath()),
                   new JSONObject()
-                    .put("email", "")
-                    .put("password", "")
-                    .put("token", "")
                     .toString(4).getBytes()
                 );
 
