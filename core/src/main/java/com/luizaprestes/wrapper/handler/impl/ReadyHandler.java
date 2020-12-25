@@ -1,9 +1,9 @@
 package com.luizaprestes.wrapper.handler.impl;
 
 import com.luizaprestes.wrapper.WrapperClient;
-import com.luizaprestes.wrapper.entities.channel.TextChannel;
-import com.luizaprestes.wrapper.entities.guild.Guild;
-import com.luizaprestes.wrapper.entities.user.impl.SelfInfoImpl;
+import com.luizaprestes.wrapper.entity.channel.TextChannel;
+import com.luizaprestes.wrapper.entity.guild.Guild;
+import com.luizaprestes.wrapper.entity.user.impl.SelfInfoImpl;
 import com.luizaprestes.wrapper.event.listener.ReadyEvent;
 import com.luizaprestes.wrapper.handler.ISocketHandler;
 import com.luizaprestes.wrapper.util.Logger;

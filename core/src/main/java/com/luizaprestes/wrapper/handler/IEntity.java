@@ -1,13 +1,13 @@
 package com.luizaprestes.wrapper.handler;
 
-import com.luizaprestes.wrapper.entities.channel.PrivateChannel;
-import com.luizaprestes.wrapper.entities.channel.TextChannel;
-import com.luizaprestes.wrapper.entities.channel.VoiceChannel;
-import com.luizaprestes.wrapper.entities.guild.Guild;
-import com.luizaprestes.wrapper.entities.guild.impl.GuildImpl;
-import com.luizaprestes.wrapper.entities.guild.model.Role;
-import com.luizaprestes.wrapper.entities.user.SelfInfo;
-import com.luizaprestes.wrapper.entities.user.User;
+import com.luizaprestes.wrapper.entity.channel.PrivateChannel;
+import com.luizaprestes.wrapper.entity.channel.TextChannel;
+import com.luizaprestes.wrapper.entity.channel.VoiceChannel;
+import com.luizaprestes.wrapper.entity.guild.Guild;
+import com.luizaprestes.wrapper.entity.guild.impl.GuildImpl;
+import com.luizaprestes.wrapper.entity.guild.model.Role;
+import com.luizaprestes.wrapper.entity.user.SelfInfo;
+import com.luizaprestes.wrapper.entity.user.User;
 import org.json.JSONObject;
 
 public interface IEntity {

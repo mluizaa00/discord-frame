@@ -1,8 +1,8 @@
 package com.luizaprestes.wrapper;
 
-import com.luizaprestes.wrapper.entities.guild.GuildRegistry;
-import com.luizaprestes.wrapper.entities.user.SelfInfo;
-import com.luizaprestes.wrapper.entities.user.UserRegistry;
+import com.luizaprestes.wrapper.entity.guild.GuildRegistry;
+import com.luizaprestes.wrapper.entity.user.SelfInfo;
+import com.luizaprestes.wrapper.entity.user.UserRegistry;
 import com.luizaprestes.wrapper.event.client.EventClient;
 import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
 import com.luizaprestes.wrapper.util.Constants;
