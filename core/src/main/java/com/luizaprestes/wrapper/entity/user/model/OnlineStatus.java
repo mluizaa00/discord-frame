@@ -1,12 +1,14 @@
 package com.luizaprestes.wrapper.entity.user.model;
 
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 /**
  @author luiza
  @version-implemented 0.0.1
  @since 12.19.2020
  */
+@Getter
 @AllArgsConstructor
 public enum OnlineStatus {
 

@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.handler.impl;
+package com.luizaprestes.wrapper.handler.client;
 
 import com.luizaprestes.wrapper.WrapperClient;
 import com.luizaprestes.wrapper.handler.IEntity;

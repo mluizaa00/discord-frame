@@ -1,11 +1,7 @@
 package com.luizaprestes.wrapper.event.client;
 
-import com.luizaprestes.wrapper.WrapperClient;
 import com.luizaprestes.wrapper.event.Event;
 import com.luizaprestes.wrapper.event.IEvent;
-import com.luizaprestes.wrapper.handler.impl.ReadyHandler;
-import lombok.Data;
-import lombok.Getter;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -18,13 +14,6 @@ import java.util.List;
 public class EventClient {
 
     private final List<IEvent> listenerList = new LinkedList<>();
-
-    @Getter
-    private final ReadyHandler readyHandler;
-
-    public EventClient(WrapperClient client) {
-        this.readyHandler = new ReadyHandler(client, client.getEntityBuilder());
-    }
 
     public void register(IEvent listener) {
         listenerList.add(listener);

@@ -13,7 +13,9 @@ public enum OpCodes {
     PRESENCE_UPDATE(3),
     VOICE_STATE_UPDATE(4),
     RESUME(6),
+    RECONNECT(7),
     REQUEST_GUILD_MEMBERS(8),
+    INVALID_SESSION(9),
     HELLO(10);
 
     private final int code;

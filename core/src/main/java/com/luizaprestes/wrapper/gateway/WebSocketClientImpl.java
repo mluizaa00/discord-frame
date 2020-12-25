@@ -34,7 +34,7 @@ public class WebSocketClientImpl extends WebSocketClient {
     @Override
     public void onOpen(ServerHandshake handshake) {
         final JSONObject connectObj = new JSONObject()
-          .put("op", 2)
+          .put("op", OpCodes.IDENTIFY.getCode())
           .put("d", new JSONObject()
             .put("token", client.getAuthToken())
             .put("intents", 513)
@@ -43,10 +43,14 @@ public class WebSocketClientImpl extends WebSocketClient {
               .put("$browser", "Java Discord Wrapper")
               .put("$device", "Java Discord Wrapper")
             )
-            .put("v", 8));
+            .put("v", 8)
+            .put("presence", new JSONObject()
+              .put("status", client.getStatus().getKey())
+              .put("afk", false)
+            )
+          );
 
         send(connectObj.toString());
-
         this.connected = true;
 
         sendUpdates();
@@ -70,17 +74,23 @@ public class WebSocketClientImpl extends WebSocketClient {
             logger.debug(context);
         }
 
+        if (opCode == OpCodes.RECONNECT.getCode()) {
+            this.reconnect();
+            logger.debug(context);
+        }
+
         if (type != null) {
             switch (type) {
                 case "READY": {
-                    client.getEventClient().getReadyHandler().handle(content);
+                    assert content != null;
+                    client.getHandlerClient().getReadyHandler().handle(content);
 
                     keepAlive();
                     logger.info("Discord Java Wrapper is ready.");
                     break;
                 }
                 default: {
-                    break;
+                    System.out.println(type);
                 }
             }
         }
@@ -99,8 +109,6 @@ public class WebSocketClientImpl extends WebSocketClient {
                         logger.debug("URI: " + uri.toString());
                         Thread.sleep(60000);
                     }
-
-                    Thread.sleep(60000);
                 } catch (InterruptedException exception) {
                     exception.printStackTrace();
 
@@ -125,10 +133,8 @@ public class WebSocketClientImpl extends WebSocketClient {
                             .put("op", OpCodes.HEARTBEAT.getCode())
                             .put("d", System.currentTimeMillis()).toString()
                         );
-                        Thread.sleep(keepAliveInterval);
+                        Thread.sleep(60000);
                     }
-
-                    Thread.sleep(keepAliveInterval);
                 } catch (InterruptedException exception) {
                     exception.printStackTrace();
 

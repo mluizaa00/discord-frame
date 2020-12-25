@@ -1,6 +1,7 @@
 package com.luizaprestes.example;
 
 import com.luizaprestes.wrapper.WrapperClient;
+import com.luizaprestes.wrapper.entity.user.model.OnlineStatus;
 
 import static com.luizaprestes.wrapper.util.Config.*;
 
@@ -16,6 +17,7 @@ public class ExampleBot {
           getConfig().getString("token")
         );
 
+        client.setStatus(OnlineStatus.DO_NOT_DISTURB);
         client.login();
     }
 

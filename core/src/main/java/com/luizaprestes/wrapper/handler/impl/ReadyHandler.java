@@ -6,6 +6,7 @@ import com.luizaprestes.wrapper.entity.guild.Guild;
 import com.luizaprestes.wrapper.entity.user.impl.SelfInfoImpl;
 import com.luizaprestes.wrapper.event.listener.ReadyEvent;
 import com.luizaprestes.wrapper.handler.ISocketHandler;
+import com.luizaprestes.wrapper.handler.client.EntityBuilder;
 import com.luizaprestes.wrapper.util.Logger;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -55,7 +56,7 @@ public class ReadyHandler implements ISocketHandler {
             builder.createPrivateChannel(privateChannels.getJSONObject(i));
         }
 
-        client.getEventClient().handle(new ReadyEvent());
+        client.getEventClient().handle(new ReadyEvent(client));
         logger.debug("ReadyHandler was loaded.");
     }
 

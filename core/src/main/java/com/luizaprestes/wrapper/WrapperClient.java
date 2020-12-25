@@ -3,8 +3,10 @@ package com.luizaprestes.wrapper;
 import com.luizaprestes.wrapper.entity.guild.GuildRegistry;
 import com.luizaprestes.wrapper.entity.user.SelfInfo;
 import com.luizaprestes.wrapper.entity.user.UserRegistry;
+import com.luizaprestes.wrapper.entity.user.model.OnlineStatus;
 import com.luizaprestes.wrapper.event.client.EventClient;
-import com.luizaprestes.wrapper.handler.impl.EntityBuilder;
+import com.luizaprestes.wrapper.handler.client.EntityBuilder;
+import com.luizaprestes.wrapper.handler.client.HandlerClient;
 import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
 import com.luizaprestes.wrapper.gateway.request.RequestType;
@@ -39,6 +41,10 @@ public class WrapperClient {
     private final EntityBuilder entityBuilder;
 
     private final EventClient eventClient;
+    private final HandlerClient handlerClient;
+
+    @Setter
+    private OnlineStatus status;
 
     /**
      * Client loader
@@ -52,7 +58,10 @@ public class WrapperClient {
 
         this.authToken = token;
 
-        this.eventClient = new EventClient(this);
+        this.eventClient = new EventClient();
+        this.handlerClient = new HandlerClient(this);
+
+        this.status = OnlineStatus.ONLINE;
 
     }
 
