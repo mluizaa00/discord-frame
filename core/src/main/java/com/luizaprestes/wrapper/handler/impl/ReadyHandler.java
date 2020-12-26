@@ -1,5 +1,8 @@
 package com.luizaprestes.wrapper.handler.impl;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.node.ArrayNode;
+import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.luizaprestes.wrapper.WrapperClient;
 import com.luizaprestes.wrapper.entity.channel.TextChannel;
 import com.luizaprestes.wrapper.entity.guild.Guild;
@@ -8,11 +11,8 @@ import com.luizaprestes.wrapper.event.listener.ReadyEvent;
 import com.luizaprestes.wrapper.handler.ISocketHandler;
 import com.luizaprestes.wrapper.handler.client.EntityBuilder;
 import com.luizaprestes.wrapper.util.Logger;
-import org.json.JSONArray;
-import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 /**
  @author luiza
@@ -24,40 +24,52 @@ public class ReadyHandler implements ISocketHandler {
     private final WrapperClient client;
     private final EntityBuilder builder;
 
-    private final Logger logger = new Logger(ReadyHandler.class, false);
+    private final Logger logger = new Logger(ReadyHandler.class, true);
+
+    private final ObjectMapper map;
 
     public ReadyHandler(WrapperClient client, EntityBuilder builder) {
         this.client = client;
         this.builder = builder;
+        this.map = client.getMapper();
     }
 
     @Override
-    public void handle(JSONObject context) {
-        client.setSelfInfo(builder.createSelfInfo(context.getJSONObject("user")));
+    public void handle(String context) {
+        try {
+            final ObjectNode content = map.readValue(context, ObjectNode.class);
 
-        final List<TextChannel> mutedChannels = new ArrayList<>();
+            client.setSelfInfo(builder.createSelfInfo(content.get("user").toPrettyString()));
 
-        final JSONArray guilds = context.isNull("guilds") ? null : context.getJSONArray("guilds");
-        final JSONArray muted = context.isNull("muted_channels") ? null : context.getJSONObject("user_settings").getJSONArray("muted_channels");
+            final ArrayNode guilds = (ArrayNode) content.get("guilds");
+            final ArrayNode muted = (ArrayNode) content.get("muted_channels");
+            final ArrayList<TextChannel> mutedChannels = new ArrayList<>();
 
-        for (int i = 0; i < guilds.length(); i++) {
-            final Guild guild = builder.createGuild(guilds.getJSONObject(i));
-            final TextChannel channel = guild.getTextChannels().getChannelById(muted.getString(i));
+            for (int i = 0; i < guilds.size(); i++) {
+                final Guild guild = builder.createGuild(guilds.get(i).toPrettyString());
+                final TextChannel channel = guild.getTextChannels().getChannelById(muted.get(i).textValue());
 
-            if (channel != null) {
-                mutedChannels.add(channel);
+                if (channel != null) {
+                    mutedChannels.add(channel);
+                }
             }
+
+            ((SelfInfoImpl) client.getSelfInfo()).setMutedChannels(mutedChannels);
+
+            final ArrayNode privateChannels = (ArrayNode) content.get("private_channels");
+
+            for (int i = 0; i < privateChannels.size(); i++) {
+                builder.createPrivateChannel(privateChannels.get(i).toPrettyString());
+            }
+
+            client.getEventClient().handle(new ReadyEvent(client));
+            logger.debug("ReadyHandler was loaded.");
+
+        } catch (Exception exception) {
+            logger.error("A error occurred while reading json from ready websocket message.");
+            exception.printStackTrace();
         }
 
-        ((SelfInfoImpl) client.getSelfInfo()).setMutedChannels(mutedChannels);
-
-        final JSONArray privateChannels = context.getJSONArray("private_channels");
-        for (int i = 0; i < privateChannels.length(); i++) {
-            builder.createPrivateChannel(privateChannels.getJSONObject(i));
-        }
-
-        client.getEventClient().handle(new ReadyEvent(client));
-        logger.debug("ReadyHandler was loaded.");
     }
 
 }

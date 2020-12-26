@@ -8,21 +8,20 @@ import com.luizaprestes.wrapper.entity.guild.impl.GuildImpl;
 import com.luizaprestes.wrapper.entity.guild.model.Role;
 import com.luizaprestes.wrapper.entity.user.SelfInfo;
 import com.luizaprestes.wrapper.entity.user.User;
-import org.json.JSONObject;
 
 public interface IEntity {
 
-    Guild createGuild(JSONObject context);
+    Guild createGuild(String context);
 
-    PrivateChannel createPrivateChannel(JSONObject context);
+    PrivateChannel createPrivateChannel(String context);
 
-    SelfInfo createSelfInfo(JSONObject context);
+    SelfInfo createSelfInfo(String context);
 
-    Role createRole(JSONObject context, GuildImpl guild);
+    Role createRole(String context, GuildImpl guild);
 
-    TextChannel createTextChannel(JSONObject context, GuildImpl guild);
+    TextChannel createTextChannel(String context, GuildImpl guild);
 
-    VoiceChannel createVoiceChannel(JSONObject context);
+    VoiceChannel createVoiceChannel(String context, GuildImpl guild);
 
-    User createUser(JSONObject context);
+    User createUser(String context);
 }

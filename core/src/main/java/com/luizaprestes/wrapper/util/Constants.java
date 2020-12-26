@@ -2,6 +2,7 @@ package com.luizaprestes.wrapper.util;
 
 public class Constants {
 
+    public static final String PROJECT_NAME = "Java Discord Wrapper";
     public static final String GITHUB = "https://github.com/mluizaa00/discord-wrapper";
     public static final String VERSION = "v0.0.1";
 

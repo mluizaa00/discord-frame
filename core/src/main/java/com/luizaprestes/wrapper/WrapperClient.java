@@ -1,5 +1,6 @@
 package com.luizaprestes.wrapper;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.luizaprestes.wrapper.entity.guild.GuildRegistry;
 import com.luizaprestes.wrapper.entity.user.SelfInfo;
 import com.luizaprestes.wrapper.entity.user.UserRegistry;
@@ -12,7 +13,6 @@ import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
 import com.luizaprestes.wrapper.gateway.request.RequestType;
 import lombok.Getter;
 import lombok.Setter;
-import org.json.simple.parser.JSONParser;
 
 
 /**
@@ -33,8 +33,6 @@ public class WrapperClient {
 
     private final String authToken;
 
-    private final JSONParser parser;
-
     private final GuildRegistry guildRegistry;
     private final UserRegistry userRegistry;
 
@@ -43,6 +41,8 @@ public class WrapperClient {
     private final EventClient eventClient;
     private final HandlerClient handlerClient;
 
+    private final ObjectMapper mapper;
+
     @Setter
     private OnlineStatus status;
 
@@ -50,7 +50,7 @@ public class WrapperClient {
      * Client loader
      */
     public WrapperClient(String token) {
-        this.parser = new JSONParser();
+        this.mapper = new ObjectMapper();
         this.entityBuilder = new EntityBuilder(this);
 
         this.guildRegistry = new GuildRegistry();

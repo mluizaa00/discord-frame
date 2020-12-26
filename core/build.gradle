@@ -7,7 +7,10 @@ repositories {
 }
 
 dependencies {
-    compile "org.java-websocket:Java-WebSocket:1.5.1"
-    implementation("com.squareup.okhttp3:okhttp:4.9.0")
+    compile 'org.java-websocket:Java-WebSocket:1.5.1'
+
+    implementation 'com.squareup.okhttp3:okhttp:4.9.0'
+    implementation 'org.json:json:20201115'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.12.0'
 
 }

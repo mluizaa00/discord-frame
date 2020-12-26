@@ -1,10 +1,8 @@
 package com.luizaprestes.wrapper.util;
 
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.io.File;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
@@ -27,14 +25,14 @@ public class Config {
 
                 System.out.println("The config.json was created. Populate with login information.");
                 System.exit(0);
-            } catch (JSONException | IOException exception) {
+            } catch (Exception exception) {
                 exception.printStackTrace();
             }
         }
 
         try {
             return new JSONObject(Files.readString(Paths.get(config.getPath())));
-        } catch (IOException exception) {
+        } catch (Exception exception) {
             exception.printStackTrace();
         }
 
