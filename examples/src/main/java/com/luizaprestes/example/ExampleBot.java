@@ -1,9 +1,10 @@
 package com.luizaprestes.example;
 
-import com.luizaprestes.wrapper.WrapperClient;
+import com.luizaprestes.example.listener.ChannelCreateListener;
+import com.luizaprestes.wrapper.ClientFrame;
 import com.luizaprestes.wrapper.entity.user.model.OnlineStatus;
 
-import static com.luizaprestes.wrapper.util.Config.*;
+import static com.luizaprestes.wrapper.util.Config.getConfig;
 
 /**
  @author luiza
@@ -13,8 +14,12 @@ import static com.luizaprestes.wrapper.util.Config.*;
 public class ExampleBot {
 
     public static void main(String[] args) {
-        final WrapperClient client = new WrapperClient(
+        final ClientFrame client = new ClientFrame(
           getConfig().getString("token")
+        );
+
+        client.registerEvents(
+          new ChannelCreateListener()
         );
 
         client.setStatus(OnlineStatus.DO_NOT_DISTURB);

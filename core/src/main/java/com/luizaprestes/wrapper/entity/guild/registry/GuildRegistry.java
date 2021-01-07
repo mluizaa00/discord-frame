@@ -1,4 +1,6 @@
-package com.luizaprestes.wrapper.entity.guild;
+package com.luizaprestes.wrapper.entity.guild.registry;
+
+import com.luizaprestes.wrapper.entity.guild.Guild;
 
 import java.util.Collection;
 import java.util.HashMap;

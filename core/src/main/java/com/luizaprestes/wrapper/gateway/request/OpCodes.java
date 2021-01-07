@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.gateway;
+package com.luizaprestes.wrapper.gateway.request;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -19,4 +19,5 @@ public enum OpCodes {
     HELLO(10);
 
     private final int code;
+
 }

@@ -5,7 +5,7 @@ import com.luizaprestes.wrapper.entity.channel.VoiceChannel;
 import com.luizaprestes.wrapper.entity.channel.registry.TextChannelRegistry;
 import com.luizaprestes.wrapper.entity.channel.registry.VoiceChannelRegistry;
 import com.luizaprestes.wrapper.entity.guild.Guild;
-import com.luizaprestes.wrapper.entity.guild.RoleRegistry;
+import com.luizaprestes.wrapper.entity.guild.registry.RoleRegistry;
 import com.luizaprestes.wrapper.entity.guild.model.Region;
 
 import com.luizaprestes.wrapper.entity.guild.model.Role;

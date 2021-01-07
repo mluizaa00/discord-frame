@@ -3,6 +3,7 @@ package com.luizaprestes.wrapper.entity.guild;
 import com.luizaprestes.wrapper.entity.channel.registry.TextChannelRegistry;
 import com.luizaprestes.wrapper.entity.channel.registry.VoiceChannelRegistry;
 import com.luizaprestes.wrapper.entity.guild.model.Region;
+import com.luizaprestes.wrapper.entity.guild.registry.RoleRegistry;
 
 public interface Guild {
 

@@ -1,16 +1,15 @@
 package com.luizaprestes.wrapper;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.luizaprestes.wrapper.entity.guild.GuildRegistry;
+import com.luizaprestes.wrapper.entity.guild.registry.GuildRegistry;
 import com.luizaprestes.wrapper.entity.user.SelfInfo;
-import com.luizaprestes.wrapper.entity.user.UserRegistry;
+import com.luizaprestes.wrapper.entity.user.registry.UserRegistry;
 import com.luizaprestes.wrapper.entity.user.model.OnlineStatus;
 import com.luizaprestes.wrapper.event.client.EventClient;
+import com.luizaprestes.wrapper.event.client.EventLoader;
 import com.luizaprestes.wrapper.handler.client.EntityBuilder;
-import com.luizaprestes.wrapper.handler.client.HandlerClient;
 import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.gateway.WebSocketClientImpl;
-import com.luizaprestes.wrapper.gateway.request.RequestType;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -23,15 +22,14 @@ import lombok.Setter;
 @Getter
 public class WrapperClient {
 
-    protected final String gateway = Constants.GATEWAY;
+    private final String gateway = Constants.GATEWAY;
 
-    protected RequestType requestType;
-    protected WebSocketClientImpl webSocketClient;
+    private WebSocketClientImpl webSocketClient;
 
     @Setter
-    protected SelfInfo selfInfo;
+    private SelfInfo selfInfo;
 
-    private final String authToken;
+    private final String token;
 
     private final GuildRegistry guildRegistry;
     private final UserRegistry userRegistry;
@@ -39,29 +37,27 @@ public class WrapperClient {
     private final EntityBuilder entityBuilder;
 
     private final EventClient eventClient;
-    private final HandlerClient handlerClient;
+    private final EventLoader eventLoader;
 
     private final ObjectMapper mapper;
 
     @Setter
-    private OnlineStatus status;
+    public OnlineStatus status;
 
     /**
      * Client loader
      */
     public WrapperClient(String token) {
+        this.token = token;
+
         this.mapper = new ObjectMapper();
         this.entityBuilder = new EntityBuilder(this);
 
         this.guildRegistry = new GuildRegistry();
         this.userRegistry = new UserRegistry();
 
-        this.authToken = token;
-
         this.eventClient = new EventClient();
-        this.handlerClient = new HandlerClient(this);
-
-        this.status = OnlineStatus.ONLINE;
+        this.eventLoader = new EventLoader(this);
 
     }
 

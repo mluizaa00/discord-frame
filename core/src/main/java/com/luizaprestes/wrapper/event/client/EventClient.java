@@ -1,7 +1,6 @@
 package com.luizaprestes.wrapper.event.client;
 
 import com.luizaprestes.wrapper.event.Event;
-import com.luizaprestes.wrapper.event.IEvent;
 
 import java.util.LinkedList;
 import java.util.List;
@@ -13,20 +12,24 @@ import java.util.List;
  */
 public class EventClient {
 
-    private final List<IEvent> listenerList = new LinkedList<>();
+    private final EventParser parser;
 
-    public void register(IEvent listener) {
-        listenerList.add(listener);
+    public EventClient() {
+        this.parser = new EventParser(this);
     }
 
-    public void remove(IEvent listener) {
-        listenerList.remove(listener);
+    public final List<Object> listenerList = new LinkedList<>();
+
+    public void register(Object holder) {
+        listenerList.add(holder);
+    }
+
+    public void remove(Object holder) {
+        listenerList.remove(holder);
     }
 
     public void handle(Event event) {
-        for (IEvent listener : listenerList) {
-            listener.onEvent(event);
-        }
+        parser.parse(event);
     }
 
 }

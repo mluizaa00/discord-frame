@@ -5,8 +5,8 @@ import com.luizaprestes.wrapper.event.Event;
 
 public class ReadyEvent extends Event {
 
-    public ReadyEvent(WrapperClient client) {
-        super(client);
+    public ReadyEvent(WrapperClient client, int responseNumber) {
+        super(client, responseNumber);
     }
 
 }

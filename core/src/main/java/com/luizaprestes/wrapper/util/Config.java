@@ -20,6 +20,7 @@ public class Config {
             try {
                 Files.write(Paths.get(config.getPath()),
                   new JSONObject()
+                    .put("token", "YOUR_TOKEN")
                     .toString(4).getBytes()
                 );
 

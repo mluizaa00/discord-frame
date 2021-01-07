@@ -7,8 +7,11 @@ import lombok.Getter;
 public abstract class Event {
 
     protected final WrapperClient client;
+    protected final int responseNumber;
 
-    public Event(WrapperClient client) {
+    public Event(WrapperClient client, int responseNumber) {
         this.client = client;
+        this.responseNumber = responseNumber;
     }
+
 }

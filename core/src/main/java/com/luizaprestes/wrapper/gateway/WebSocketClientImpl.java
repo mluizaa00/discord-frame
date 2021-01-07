@@ -4,6 +4,8 @@ import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.luizaprestes.wrapper.WrapperClient;
+import com.luizaprestes.wrapper.gateway.request.OpCodes;
+import com.luizaprestes.wrapper.handler.impl.ReadyHandler;
 import com.luizaprestes.wrapper.util.Constants;
 import com.luizaprestes.wrapper.util.Logger;
 import lombok.Getter;
@@ -22,12 +24,11 @@ import java.net.URI;
 public class WebSocketClientImpl extends WebSocketClient {
 
     public boolean connected;
-
-    private final WrapperClient client;
     private long keepAliveInterval;
 
-    private final Logger logger = new Logger(WebSocketClientImpl.class, false);
+    private final WrapperClient client;
 
+    private final Logger logger;
     private final ObjectMapper map;
 
     public WebSocketClientImpl(String url, @NotNull WrapperClient client) {
@@ -35,6 +36,8 @@ public class WebSocketClientImpl extends WebSocketClient {
 
         this.client = client;
         this.map = client.getMapper();
+        this.logger = new Logger(WebSocketClientImpl.class, false);
+
         this.connect();
     }
 
@@ -50,7 +53,7 @@ public class WebSocketClientImpl extends WebSocketClient {
           .put("afk", false);
 
         final ObjectNode infoPayload = map.createObjectNode()
-          .put("token", client.getAuthToken())
+          .put("token", client.getToken())
           .put("intents", 513)
           .set("properties", propertiesPayload);
         infoPayload
@@ -75,7 +78,7 @@ public class WebSocketClientImpl extends WebSocketClient {
     @Override
     public void onMessage(String context) {
         try {
-             final ObjectNode content = map.readValue(context, ObjectNode.class);
+            final ObjectNode content = map.readValue(context, ObjectNode.class);
 
             final int opCode = content.get("op").intValue();
             if (opCode == OpCodes.HELLO.getCode()) {
@@ -94,9 +97,11 @@ public class WebSocketClientImpl extends WebSocketClient {
                 logger.debug(context);
             }
 
+            final int responseNumber = content.get("s").asInt();
             if (type != null) switch (type) {
                 case "READY": {
-                    client.getHandlerClient().getReadyHandler().handle(content.get("d").toPrettyString());
+                    new ReadyHandler(client, responseNumber, client.getEntityBuilder())
+                      .handle(content.get("d").toPrettyString());
 
                     keepAlive();
                     logger.info("Discord Java Wrapper is ready.");

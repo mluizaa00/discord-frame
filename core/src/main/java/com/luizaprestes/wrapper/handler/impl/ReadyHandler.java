@@ -8,7 +8,7 @@ import com.luizaprestes.wrapper.entity.channel.TextChannel;
 import com.luizaprestes.wrapper.entity.guild.Guild;
 import com.luizaprestes.wrapper.entity.user.impl.SelfInfoImpl;
 import com.luizaprestes.wrapper.event.listener.ReadyEvent;
-import com.luizaprestes.wrapper.handler.ISocketHandler;
+import com.luizaprestes.wrapper.handler.SocketHandler;
 import com.luizaprestes.wrapper.handler.client.EntityBuilder;
 import com.luizaprestes.wrapper.util.Logger;
 
@@ -19,7 +19,7 @@ import java.util.ArrayList;
  @version-implemented 0.0.1
  @since 12.19.2020
  */
-public class ReadyHandler implements ISocketHandler {
+public class ReadyHandler extends SocketHandler {
 
     private final WrapperClient client;
     private final EntityBuilder builder;
@@ -28,7 +28,8 @@ public class ReadyHandler implements ISocketHandler {
 
     private final ObjectMapper map;
 
-    public ReadyHandler(WrapperClient client, EntityBuilder builder) {
+    public ReadyHandler(WrapperClient client, int responseNumber, EntityBuilder builder) {
+        super(client, responseNumber);
         this.client = client;
         this.builder = builder;
         this.map = client.getMapper();
@@ -62,7 +63,7 @@ public class ReadyHandler implements ISocketHandler {
                 builder.createPrivateChannel(privateChannels.get(i).toPrettyString());
             }
 
-            client.getEventClient().handle(new ReadyEvent(client));
+            client.getEventClient().handle(new ReadyEvent(client, responseNumber));
             logger.debug("ReadyHandler was loaded.");
 
         } catch (Exception exception) {

@@ -1,4 +1,4 @@
-package com.luizaprestes.wrapper.entity.guild;
+package com.luizaprestes.wrapper.entity.guild.registry;
 
 import com.luizaprestes.wrapper.entity.guild.model.Role;
 

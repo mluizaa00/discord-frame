@@ -1,4 +1,6 @@
-package com.luizaprestes.wrapper.entity.user;
+package com.luizaprestes.wrapper.entity.user.registry;
+
+import com.luizaprestes.wrapper.entity.user.User;
 
 import java.util.Collection;
 import java.util.HashMap;
