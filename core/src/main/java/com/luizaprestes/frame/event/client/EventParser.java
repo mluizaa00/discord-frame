@@ -8,8 +8,6 @@ import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
-import java.util.Arrays;
-import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class EventParser {
@@ -22,8 +20,11 @@ public class EventParser {
                 final EventAdapter annotation = method.getAnnotation(EventAdapter.class);
                 if (annotation == null || !Modifier.isPublic(method.getModifiers())) break;
 
-                for (Parameter parameter : Arrays.stream(method.getParameters()).collect(Collectors.toList())) {
-                    if (annotation.event().getEventClass().equals(parameter.getType())) {
+                final Class<?> annotationClass = annotation.event().getEventClass();
+                if (!event.getClass().getSimpleName().equals(annotationClass.getSimpleName())) break;
+
+                for (Parameter parameter : method.getParameters()) {
+                    if (annotationClass.equals(parameter.getType())) {
                         try {
                             method.invoke(holder);
                         } catch (IllegalAccessException | InvocationTargetException exception) {

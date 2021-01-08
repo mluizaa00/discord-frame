@@ -1,8 +1,8 @@
-package com.luizaprestes.frame.event.impl.channel.delete;
+package com.luizaprestes.frame.event.channel.create;
 
 import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.entities.channel.VoiceChannel;
-import com.luizaprestes.frame.event.impl.channel.common.VoiceChannelEvent;
+import com.luizaprestes.frame.event.channel.common.VoiceChannelEvent;
 import lombok.Getter;
 
 @Getter

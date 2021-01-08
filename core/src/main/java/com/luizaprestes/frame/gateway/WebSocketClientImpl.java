@@ -86,18 +86,15 @@ public class WebSocketClientImpl extends WebSocketClient {
             final int opCode = content.get("op").intValue();
             if (opCode == OpCode.HELLO.getCode()) {
                 this.keepAliveInterval = content.get("d").get("heartbeat_interval").asLong();
-                logger.debug(context);
             }
 
             String type = null;
             if (opCode == OpCode.DISPATCH.getCode()) {
                 type = content.get("t").textValue();
-                logger.debug(context);
             }
 
             if (opCode == OpCode.RECONNECT.getCode()) {
                 this.reconnect();
-                logger.debug(context);
             }
 
             final int responseNumber = content.get("s").asInt();
@@ -113,6 +110,10 @@ public class WebSocketClientImpl extends WebSocketClient {
                 }
                 case CHANNEL_CREATE: {
                     new ChannelCreateHandler(client, responseNumber).handle(value);
+                    break;
+                }
+                case GUILD_CREATE: {
+                    client.getEntityBuilder().createGuild(value);
                     break;
                 }
                 default: {
@@ -135,13 +136,12 @@ public class WebSocketClientImpl extends WebSocketClient {
                     while (this.isAlive() && !this.isInterrupted()) {
                         logger.debug("Connected: " + connected);
                         logger.debug("Heartbeat interval: " + keepAliveInterval);
-                        logger.debug("URI: " + uri.toString());
                         Thread.sleep(60000);
                     }
                 } catch (InterruptedException exception) {
                     exception.printStackTrace();
 
-                    logger.error("The thread: Updates, has been interrupted");
+                    logger.error("The thread Updates has been interrupted");
                     System.exit(0);
                 }
             }
@@ -167,7 +167,7 @@ public class WebSocketClientImpl extends WebSocketClient {
                 } catch (Exception exception) {
                     exception.printStackTrace();
 
-                    logger.error("The thread: Heartbeat, has been interrupted");
+                    logger.error("The thread Heartbeat has been interrupted");
                     System.exit(0);
                 }
             }

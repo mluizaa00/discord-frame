@@ -7,7 +7,7 @@ import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.entities.channel.TextChannel;
 import com.luizaprestes.frame.entities.guild.Guild;
 import com.luizaprestes.frame.entities.user.impl.SelfInfoImpl;
-import com.luizaprestes.frame.event.impl.ReadyEvent;
+import com.luizaprestes.frame.event.ReadyEvent;
 import com.luizaprestes.frame.handler.SocketHandler;
 import com.luizaprestes.frame.handler.EntityBuilder;
 import com.luizaprestes.frame.utils.Logger;
@@ -24,7 +24,7 @@ public class ReadyHandler extends SocketHandler {
     private final Frame client;
     private final EntityBuilder builder;
 
-    private final Logger logger = new Logger(ReadyHandler.class, true);
+    private final Logger logger = new Logger(ReadyHandler.class, false);
 
     private final ObjectMapper map;
 
@@ -48,11 +48,11 @@ public class ReadyHandler extends SocketHandler {
 
             for (int i = 0; i < guilds.size(); i++) {
                 final Guild guild = builder.createGuild(guilds.get(i).toPrettyString());
-                final TextChannel channel = guild.getTextChannels().getChannelById(muted.get(i).textValue());
 
-                if (channel != null) {
-                    mutedChannels.add(channel);
-                }
+                if (guild == null) break;
+
+                final TextChannel channel = guild.getTextChannels().getChannelById(muted.get(i).textValue());
+                if (channel != null) mutedChannels.add(channel);
             }
 
             ((SelfInfoImpl) client.getSelfInfo()).setMutedChannels(mutedChannels);

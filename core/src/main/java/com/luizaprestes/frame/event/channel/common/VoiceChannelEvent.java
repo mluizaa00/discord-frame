@@ -1,4 +1,4 @@
-package com.luizaprestes.frame.event.impl.channel.common;
+package com.luizaprestes.frame.event.channel.common;
 
 import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.entities.channel.VoiceChannel;

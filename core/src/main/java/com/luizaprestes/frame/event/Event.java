@@ -6,8 +6,8 @@ import lombok.Getter;
 @Getter
 public abstract class Event {
 
-    protected final Frame client;
-    protected final int responseNumber;
+    private final Frame client;
+    private final int responseNumber;
 
     public Event(Frame client, int responseNumber) {
         this.client = client;

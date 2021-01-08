@@ -1,4 +1,4 @@
-package com.luizaprestes.frame.event.impl;
+package com.luizaprestes.frame.event;
 
 import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.event.Event;

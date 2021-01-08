@@ -1,5 +1,7 @@
 package com.luizaprestes.frame.handler;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -42,55 +44,58 @@ public class EntityBuilder implements IEntity {
         try {
             final ObjectNode content = map.readValue(context, ObjectNode.class);
 
-            final String id = content.get("id").textValue();
-            GuildImpl guild = ((GuildImpl) client.getGuildRegistry().getGuildById(id));
+            if (!content.get("unavailable").booleanValue()) {
+                final String id = content.get("id").textValue();
+                GuildImpl guild = ((GuildImpl) client.getGuildRegistry().getGuildById(id));
 
-            if (guild == null) {
-                guild = new GuildImpl(id);
-                client.getGuildRegistry().registerGuild(guild);
-            }
-
-            guild.setIconId(content.get("icon").textValue());
-            guild.setRegion(Region.getRegion(content.get("region").textValue()));
-            guild.setName(content.get("name").textValue());
-            guild.setOwnerId(content.get("owner_id").textValue());
-            guild.setAfkTimeout(content.get("afk_timeout").intValue());
-            guild.setAfkChannelId(content.get("afk_channel_id").textValue());
-
-            final ArrayNode channels = (ArrayNode) content.get("channels");
-            for (int i = 0; i < channels.size(); i++) {
-                final ObjectNode channel = map.readValue(channels.get(i).toPrettyString(), ObjectNode.class);
-                final String type = channel.get("type").textValue();
-
-                switch (type) {
-                    case "text": {
-                        createTextChannel(context, id);
-                    }
-                    case "voice": {
-                        createVoiceChannel(context, id);
-                    }
+                if (guild == null) {
+                    guild = new GuildImpl(id);
+                    client.getGuildRegistry().registerGuild(guild);
                 }
 
+                guild.setIconId(content.get("icon") != null ? content.get("icon").textValue() : null);
+                guild.setRegion(Region.getRegion(content.get("region").textValue()));
+                guild.setName(content.get("name").textValue());
+                guild.setOwnerId(content.get("owner_id").textValue());
+                guild.setAfkTimeout(content.get("afk_timeout").intValue());
+                guild.setAfkChannelId(content.get("afk_channel_id") != null ? content.get("afk_channel_id").textValue() : null);
+
+                final ArrayNode channels = (ArrayNode) content.get("channels");
+                for (int i = 0; i < channels.size(); i++) {
+                    final ObjectNode channel = map.readValue(channels.get(i).toPrettyString(), ObjectNode.class);
+                    final String type = channel.get("type").textValue();
+
+                    if (type == null) break;
+                    switch (type) {
+                        case "text": {
+                            createTextChannel(context, id);
+                        }
+                        case "voice": {
+                            createVoiceChannel(context, id);
+                        }
+                    }
+
+                }
+
+                final ArrayNode roles = (ArrayNode) content.get("roles");
+                for (int i = 0; i < roles.size(); i++) {
+                    final ObjectNode roleObject = map.readValue(roles.get(i).toPrettyString(), ObjectNode.class);
+                    final Role role = createRole(roleObject.toPrettyString(), id);
+
+                    guild.getRolesList().add(role);
+                    guild.getRoles().registerRole(role);
+                }
+
+                final ArrayNode members = (ArrayNode) content.get("members");
+                for (int i = 0; i < members.size(); i++) {
+                    final ObjectNode member = map.readValue(members.get(i).get("user").toPrettyString(), ObjectNode.class);
+                    createUser(member.toPrettyString());
+                }
+
+                return guild;
             }
-
-            final ArrayNode roles = (ArrayNode) content.get("roles");
-            for (int i = 0; i < roles.size(); i++) {
-                final ObjectNode roleObject = map.readValue(roles.get(i).toPrettyString(), ObjectNode.class);
-                final Role role = createRole(roleObject.toPrettyString(), id);
-
-                guild.getRolesList().add(role);
-                guild.getRoles().registerRole(role);
-            }
-
-            final ArrayNode members = (ArrayNode) content.get("members");
-            for (int i = 0; i < members.size(); i++) {
-                final ObjectNode member = map.readValue(members.get(i).toPrettyString(), ObjectNode.class);
-                createUser(member.toPrettyString());
-            }
-
-            return guild;
-        } catch (Exception exception) {
-            logger.error("A error occurred while creating guild from json message.");
+        } catch(Exception exception){
+            logger.error("A error occurred while creating Guild from Payload message.");
             exception.printStackTrace();
         }
 
@@ -111,9 +116,9 @@ public class EntityBuilder implements IEntity {
 
             selfInfo.setVerified(content.get("verified").booleanValue());
             selfInfo.setUsername(content.get("username").textValue());
-            selfInfo.setAvatarId(content.get("avatar").textValue());
+            selfInfo.setAvatarId(content.get("avatar") != null ? content.get("avatar").textValue() : null);
         } catch (Exception exception) {
-            logger.error("A error occurred while creating selfinfo from json message.");
+            logger.error("A error occurred while creating SelfInfo from Payload message.");
             exception.printStackTrace();
         }
 
@@ -140,7 +145,7 @@ public class EntityBuilder implements IEntity {
 
             return role;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating role from json message.");
+            logger.error("A error occurred while creating Role from Payload message.");
             exception.printStackTrace();
         }
 
@@ -173,7 +178,7 @@ public class EntityBuilder implements IEntity {
 
             return channel;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating textchannel from json message.");
+            logger.error("A error occurred while creating Text Channel from Payload message.");
             exception.printStackTrace();
         }
 
@@ -201,7 +206,7 @@ public class EntityBuilder implements IEntity {
 
             return channel;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating voicechannel from json message.");
+            logger.error("A error occurred while creating Voice Channel from Payload message.");
             exception.printStackTrace();
         }
 
@@ -212,8 +217,8 @@ public class EntityBuilder implements IEntity {
     public User createUser(String context) {
         try {
             final ObjectNode content = map.readValue(context, ObjectNode.class);
-
             final String id = content.get("id").textValue();
+
             UserImpl user = (UserImpl) client.getUserRegistry().getUserById(id);
 
             if (user == null) {
@@ -225,8 +230,8 @@ public class EntityBuilder implements IEntity {
             user.setAvatarId(content.get("avatar").textValue());
 
             return user;
-        } catch (Exception exception) {
-            logger.error("A error occurred while creating user from json message.");
+        } catch (JsonProcessingException exception) {
+            logger.error("A error occurred while creating User from Payload message.");
             exception.printStackTrace();
         }
 
