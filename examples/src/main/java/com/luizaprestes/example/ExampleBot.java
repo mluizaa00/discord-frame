@@ -1,10 +1,10 @@
 package com.luizaprestes.example;
 
 import com.luizaprestes.example.listener.ChannelCreateListener;
-import com.luizaprestes.wrapper.ClientFrame;
-import com.luizaprestes.wrapper.entity.user.model.OnlineStatus;
+import com.luizaprestes.frame.ClientFrame;
+import com.luizaprestes.frame.entities.user.model.OnlineStatus;
 
-import static com.luizaprestes.wrapper.util.Config.getConfig;
+import static com.luizaprestes.frame.utils.Config.getConfig;
 
 /**
  @author luiza

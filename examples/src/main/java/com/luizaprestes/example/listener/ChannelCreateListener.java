@@ -1,8 +1,8 @@
 package com.luizaprestes.example.listener;
 
-import com.luizaprestes.wrapper.event.EventAdapter;
-import com.luizaprestes.wrapper.event.EventType;
-import com.luizaprestes.wrapper.event.listener.channel.TextChannelCreateEvent;
+import com.luizaprestes.frame.event.EventAdapter;
+import com.luizaprestes.frame.event.EventType;
+import com.luizaprestes.frame.event.impl.channel.create.TextChannelCreateEvent;
 
 public class ChannelCreateListener {
 
