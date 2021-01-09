@@ -10,4 +10,5 @@ public class Constants {
     public static final String GATEWAY = "wss://gateway.discord.gg/";
 
     public static final String ICONS = "https://cdn.discordapp.com/icons/";
+
 }

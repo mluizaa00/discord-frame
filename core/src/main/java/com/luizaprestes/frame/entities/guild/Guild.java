@@ -4,6 +4,7 @@ import com.luizaprestes.frame.entities.channel.registry.TextChannelRegistry;
 import com.luizaprestes.frame.entities.channel.registry.VoiceChannelRegistry;
 import com.luizaprestes.frame.entities.guild.model.Region;
 import com.luizaprestes.frame.entities.guild.registry.RoleRegistry;
+import com.luizaprestes.frame.entities.user.registry.UserRegistry;
 
 public interface Guild {
 
@@ -27,5 +28,8 @@ public interface Guild {
 
     VoiceChannelRegistry getVoiceChannels();
 
+    UserRegistry getUsers();
+
     RoleRegistry getRoles();
+
 }

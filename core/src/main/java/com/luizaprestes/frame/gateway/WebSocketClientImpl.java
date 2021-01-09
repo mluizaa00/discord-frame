@@ -37,8 +37,6 @@ public class WebSocketClientImpl extends WebSocketClient {
 
         this.client = client;
         this.map = client.getMapper();
-
-        this.connect();
     }
 
     @Override
@@ -49,7 +47,7 @@ public class WebSocketClientImpl extends WebSocketClient {
           .put("$device", Constants.PROJECT_NAME);
 
         final ObjectNode presencePayload = map.createObjectNode()
-          .put("status", client.getStatus().getKey())
+          .put("status", client.getOnlineStatus().getKey())
           .put("afk", false);
 
         final ObjectNode infoPayload = map.createObjectNode()
@@ -101,6 +99,7 @@ public class WebSocketClientImpl extends WebSocketClient {
                       .handle(value);
 
                     keepAlive();
+                    client.setStatus(Status.READY);
                     client.getLogger().atInfo().log("Discord Java Wrapper is ready.");
                     break;
                 }
@@ -141,6 +140,7 @@ public class WebSocketClientImpl extends WebSocketClient {
                       exception.getMessage()
                     );
                     System.exit(0);
+                    client.setStatus(Status.OFFLINE);
                 }
             }
         };
@@ -168,6 +168,7 @@ public class WebSocketClientImpl extends WebSocketClient {
                       exception.getMessage()
                     );
                     System.exit(0);
+                    client.setStatus(Status.OFFLINE);
                 }
             }
         };
@@ -180,10 +181,11 @@ public class WebSocketClientImpl extends WebSocketClient {
     @Override
     public void onClose(int code, String reason, boolean remote) {
         client.getLogger().atSevere().log(
-          "The connection was closed! By remote? %s, Reason: %s, Close code: %s",
+          "The Discord-Frame connection was closed! By remote? %s, Reason: %s, Close code: %s",
           remote, reason, code);
 
         this.connected = false;
+        client.setStatus(Status.OFFLINE);
     }
 
     @Override

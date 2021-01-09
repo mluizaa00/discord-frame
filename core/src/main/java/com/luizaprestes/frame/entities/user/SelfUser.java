@@ -4,7 +4,7 @@ import com.luizaprestes.frame.entities.channel.TextChannel;
 
 import java.util.List;
 
-public interface SelfInfo extends User {
+public interface SelfUser extends User {
 
     boolean isVerified();
 

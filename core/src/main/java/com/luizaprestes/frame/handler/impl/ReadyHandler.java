@@ -6,7 +6,7 @@ import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.entities.channel.TextChannel;
 import com.luizaprestes.frame.entities.guild.Guild;
-import com.luizaprestes.frame.entities.user.impl.SelfInfoImpl;
+import com.luizaprestes.frame.entities.user.impl.SelfUserImpl;
 import com.luizaprestes.frame.event.ReadyEvent;
 import com.luizaprestes.frame.handler.SocketHandler;
 import com.luizaprestes.frame.handler.EntityBuilder;
@@ -37,7 +37,7 @@ public class ReadyHandler extends SocketHandler {
         try {
             final ObjectNode content = map.readValue(context, ObjectNode.class);
 
-            client.setSelfInfo(builder.createSelfInfo(content.get("user").toPrettyString()));
+            client.setSelfUser(builder.createSelfInfo(content.get("user").toPrettyString()));
 
             final ArrayNode guilds = (ArrayNode) content.get("guilds");
             final ArrayNode muted = (ArrayNode) content.get("muted_channels");
@@ -52,7 +52,7 @@ public class ReadyHandler extends SocketHandler {
                 if (channel != null) mutedChannels.add(channel);
             }
 
-            ((SelfInfoImpl) client.getSelfInfo()).setMutedChannels(mutedChannels);
+            ((SelfUserImpl) client.getSelfUser()).setMutedChannels(mutedChannels);
 
             final ArrayNode privateChannels = (ArrayNode) content.get("private_channels");
 

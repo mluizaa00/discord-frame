@@ -5,7 +5,7 @@ import com.luizaprestes.frame.entities.channel.TextChannel;
 import com.luizaprestes.frame.entities.channel.VoiceChannel;
 import com.luizaprestes.frame.entities.guild.Guild;
 import com.luizaprestes.frame.entities.guild.model.Role;
-import com.luizaprestes.frame.entities.user.SelfInfo;
+import com.luizaprestes.frame.entities.user.SelfUser;
 import com.luizaprestes.frame.entities.user.User;
 
 public interface IEntity {
@@ -14,7 +14,7 @@ public interface IEntity {
 
     PrivateChannel createPrivateChannel(String context);
 
-    SelfInfo createSelfInfo(String context);
+    SelfUser createSelfInfo(String context);
 
     Role createRole(String context, String guildId);
 

@@ -2,7 +2,7 @@ package com.luizaprestes.frame.entities.user.impl;
 
 import com.luizaprestes.frame.entities.channel.PrivateChannel;
 import com.luizaprestes.frame.entities.channel.TextChannel;
-import com.luizaprestes.frame.entities.user.SelfInfo;
+import com.luizaprestes.frame.entities.user.SelfUser;
 import com.luizaprestes.frame.entities.user.model.OnlineStatus;
 import lombok.Data;
 
@@ -15,7 +15,7 @@ import java.util.List;
  @since 12.19.2020
  */
 @Data
-public class SelfInfoImpl implements SelfInfo {
+public class SelfUserImpl implements SelfUser {
 
     private String id;
     private String username;

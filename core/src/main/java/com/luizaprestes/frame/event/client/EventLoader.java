@@ -1,18 +1,19 @@
 package com.luizaprestes.frame.event.client;
 
 import com.luizaprestes.frame.Frame;
+import com.luizaprestes.frame.event.EventAdapter;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor
 public class EventLoader {
 
     private final Frame client;
 
-    public EventLoader(Frame client) {
-        this.client = client;
-    }
-
     public void loadEvents(Object... holders) {
         for (Object holder : holders) {
-            client.getEventClient().register(holder);
+            if (holder.getClass().getAnnotationsByType(EventAdapter.class).length >= 1)  {
+                client.getEventClient().register(holder);
+            }
         }
     }
 

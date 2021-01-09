@@ -1,6 +1,7 @@
 package com.luizaprestes.frame.entities.message.impl;
 
 import com.luizaprestes.frame.entities.channel.TextChannel;
+import com.luizaprestes.frame.entities.member.Member;
 import com.luizaprestes.frame.entities.message.Message;
 import com.luizaprestes.frame.entities.user.User;
 import lombok.Data;
@@ -13,6 +14,7 @@ public class MessageImpl implements Message {
 
     private String id;
     private User author;
+    private Member member;
 
     private String content;
     private TextChannel channel;

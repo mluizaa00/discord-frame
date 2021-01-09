@@ -9,6 +9,7 @@ import com.luizaprestes.frame.entities.guild.registry.RoleRegistry;
 import com.luizaprestes.frame.entities.guild.model.Region;
 
 import com.luizaprestes.frame.entities.guild.model.Role;
+import com.luizaprestes.frame.entities.user.registry.UserRegistry;
 import com.luizaprestes.frame.utils.Constants;
 import lombok.Data;
 
@@ -38,6 +39,7 @@ public class GuildImpl implements Guild {
 
     private TextChannelRegistry textChannels = new TextChannelRegistry();
     private VoiceChannelRegistry voiceChannels = new VoiceChannelRegistry();
+    private UserRegistry users = new UserRegistry();
     private RoleRegistry roles = new RoleRegistry();
 
     @Override

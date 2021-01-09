@@ -15,9 +15,9 @@ import com.luizaprestes.frame.entities.guild.impl.RoleImpl;
 import com.luizaprestes.frame.entities.guild.model.Region;
 import com.luizaprestes.frame.entities.guild.impl.GuildImpl;
 import com.luizaprestes.frame.entities.guild.model.Role;
-import com.luizaprestes.frame.entities.user.SelfInfo;
+import com.luizaprestes.frame.entities.user.SelfUser;
 import com.luizaprestes.frame.entities.user.User;
-import com.luizaprestes.frame.entities.user.impl.SelfInfoImpl;
+import com.luizaprestes.frame.entities.user.impl.SelfUserImpl;
 import com.luizaprestes.frame.entities.user.impl.UserImpl;
 
 /**
@@ -99,12 +99,12 @@ public class EntityBuilder implements IEntity {
     }
 
     @Override
-    public SelfInfo createSelfInfo(String context) {
-        SelfInfoImpl selfInfo = ((SelfInfoImpl) client.getSelfInfo());
+    public SelfUser createSelfInfo(String context) {
+        SelfUserImpl selfInfo = ((SelfUserImpl) client.getSelfUser());
 
         if (selfInfo == null) {
-            selfInfo = new SelfInfoImpl();
-            client.setSelfInfo(selfInfo);
+            selfInfo = new SelfUserImpl();
+            client.setSelfUser(selfInfo);
         }
 
         try {
@@ -115,7 +115,7 @@ public class EntityBuilder implements IEntity {
             selfInfo.setAvatarId(content.get("avatar") != null ? content.get("avatar").textValue() : null);
         } catch (Exception exception) {
             client.getLogger().atSevere().log(
-              "A error occurred while creating SelfInfo from Payload message. Value: %s", exception.getMessage());
+              "A error occurred while creating SelfUser from Payload message. Value: %s", exception.getMessage());
         }
 
         return selfInfo;
