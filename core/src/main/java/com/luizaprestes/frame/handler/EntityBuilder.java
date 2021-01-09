@@ -1,7 +1,6 @@
 package com.luizaprestes.frame.handler;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ArrayNode;
 import com.fasterxml.jackson.databind.node.ObjectNode;
@@ -20,7 +19,6 @@ import com.luizaprestes.frame.entities.user.SelfInfo;
 import com.luizaprestes.frame.entities.user.User;
 import com.luizaprestes.frame.entities.user.impl.SelfInfoImpl;
 import com.luizaprestes.frame.entities.user.impl.UserImpl;
-import com.luizaprestes.frame.utils.Logger;
 
 /**
  @author luiza
@@ -31,12 +29,10 @@ public class EntityBuilder implements IEntity {
 
     private final Frame client;
     private final ObjectMapper map;
-    private final Logger logger;
 
     public EntityBuilder(Frame client) {
         this.client = client;
         this.map = client.getMapper();
-        this.logger = new Logger(EntityBuilder.class, true);
     }
 
     @Override
@@ -94,9 +90,9 @@ public class EntityBuilder implements IEntity {
 
                 return guild;
             }
-        } catch(Exception exception){
-            logger.error("A error occurred while creating Guild from Payload message.");
-            exception.printStackTrace();
+        } catch(Exception exception) {
+            client.getLogger().atSevere().log(
+              "A error occurred while creating Guild from Payload message. Value: %s", exception.getMessage());
         }
 
         return null;
@@ -118,8 +114,8 @@ public class EntityBuilder implements IEntity {
             selfInfo.setUsername(content.get("username").textValue());
             selfInfo.setAvatarId(content.get("avatar") != null ? content.get("avatar").textValue() : null);
         } catch (Exception exception) {
-            logger.error("A error occurred while creating SelfInfo from Payload message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while creating SelfInfo from Payload message. Value: %s", exception.getMessage());
         }
 
         return selfInfo;
@@ -145,8 +141,8 @@ public class EntityBuilder implements IEntity {
 
             return role;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating Role from Payload message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while creating Role from Payload message. Value: %s", exception.getMessage());
         }
 
         return null;
@@ -178,8 +174,8 @@ public class EntityBuilder implements IEntity {
 
             return channel;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating Text Channel from Payload message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while creating TextChannel from Payload message. Value: %s", exception.getMessage());
         }
 
         return null;
@@ -206,8 +202,8 @@ public class EntityBuilder implements IEntity {
 
             return channel;
         } catch (Exception exception) {
-            logger.error("A error occurred while creating Voice Channel from Payload message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while creating VoiceChannel from Payload message. Value: %s", exception.getMessage());
         }
 
         return null;
@@ -231,8 +227,8 @@ public class EntityBuilder implements IEntity {
 
             return user;
         } catch (JsonProcessingException exception) {
-            logger.error("A error occurred while creating User from Payload message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while creating User from Payload message. Value: %s", exception.getMessage());
         }
 
         return null;

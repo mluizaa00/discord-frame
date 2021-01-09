@@ -1,6 +1,7 @@
 package com.luizaprestes.frame;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.common.flogger.FluentLogger;
 import com.luizaprestes.frame.entities.guild.registry.GuildRegistry;
 import com.luizaprestes.frame.entities.user.SelfInfo;
 import com.luizaprestes.frame.entities.user.registry.UserRegistry;
@@ -23,6 +24,8 @@ import lombok.Setter;
 public class Frame {
 
     private final String gateway = Constants.GATEWAY;
+
+    private final FluentLogger logger;
 
     private WebSocketClientImpl webSocketClient;
 
@@ -58,6 +61,8 @@ public class Frame {
 
         this.eventClient = new EventClient();
         this.eventLoader = new EventLoader(this);
+
+        this.logger = FluentLogger.forEnclosingClass();
 
     }
 

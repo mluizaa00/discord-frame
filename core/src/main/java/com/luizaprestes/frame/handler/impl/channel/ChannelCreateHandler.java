@@ -9,14 +9,12 @@ import com.luizaprestes.frame.event.channel.create.TextChannelCreateEvent;
 import com.luizaprestes.frame.event.channel.create.VoiceChannelCreateEvent;
 import com.luizaprestes.frame.handler.SocketHandler;
 import com.luizaprestes.frame.handler.EntityBuilder;
-import com.luizaprestes.frame.utils.Logger;
 
 import java.util.Objects;
 
 public class ChannelCreateHandler extends SocketHandler {
 
     private final ObjectMapper map;
-    private final Logger logger = new Logger(ChannelCreateHandler.class, false);
 
     private final EventClient eventClient;
     private final EntityBuilder builder;
@@ -55,13 +53,14 @@ public class ChannelCreateHandler extends SocketHandler {
                     );
                 }
                 default: {
-                    logger.error("Type from Channel Create payload was not recognized. Type: " + type);
+                    client.getLogger().atSevere().log(
+                      "Type from Channel Create payload was not recognized. Type:  %s", type);
                 }
             }
 
         } catch (JsonProcessingException | NullPointerException exception) {
-            logger.error("A error occurred while reading payload from Channel Create WebSocket message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while reading payload from Channel Create WebSocket message. Value:  %s", exception.getMessage());
         }
 
     }

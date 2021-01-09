@@ -10,7 +10,6 @@ import com.luizaprestes.frame.entities.user.impl.SelfInfoImpl;
 import com.luizaprestes.frame.event.ReadyEvent;
 import com.luizaprestes.frame.handler.SocketHandler;
 import com.luizaprestes.frame.handler.EntityBuilder;
-import com.luizaprestes.frame.utils.Logger;
 
 import java.util.ArrayList;
 
@@ -23,8 +22,6 @@ public class ReadyHandler extends SocketHandler {
 
     private final Frame client;
     private final EntityBuilder builder;
-
-    private final Logger logger = new Logger(ReadyHandler.class, false);
 
     private final ObjectMapper map;
 
@@ -64,11 +61,11 @@ public class ReadyHandler extends SocketHandler {
             }
 
             client.getEventClient().handle(new ReadyEvent(client, responseNumber));
-            logger.debug("ReadyHandler was loaded.");
+            client.getLogger().atInfo().log("ReadyHandler is ready.");
 
         } catch (Exception exception) {
-            logger.error("A error occurred while reading payload from Ready WebSocket message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+              "A error occurred while executing ReadyHandler from WebSocket message. Value: %s", exception.getMessage());
         }
 
     }

@@ -8,7 +8,6 @@ import com.luizaprestes.frame.gateway.payload.OpCode;
 import com.luizaprestes.frame.handler.impl.ReadyHandler;
 import com.luizaprestes.frame.handler.impl.channel.ChannelCreateHandler;
 import com.luizaprestes.frame.utils.Constants;
-import com.luizaprestes.frame.utils.Logger;
 import lombok.Getter;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -31,7 +30,6 @@ public class WebSocketClientImpl extends WebSocketClient {
 
     private final Frame client;
 
-    private final Logger logger;
     private final ObjectMapper map;
 
     public WebSocketClientImpl(String url, @NotNull Frame client) {
@@ -39,7 +37,6 @@ public class WebSocketClientImpl extends WebSocketClient {
 
         this.client = client;
         this.map = client.getMapper();
-        this.logger = new Logger(WebSocketClientImpl.class, false);
 
         this.connect();
     }
@@ -73,8 +70,7 @@ public class WebSocketClientImpl extends WebSocketClient {
 
             sendUpdates();
         } catch (JsonProcessingException exception) {
-            exception.printStackTrace();
-            logger.error("Unable to send identify payload.");
+            client.getLogger().atSevere().log("Unable to send identify payload, value: %s", exception.getMessage());
         }
     }
 
@@ -105,7 +101,7 @@ public class WebSocketClientImpl extends WebSocketClient {
                       .handle(value);
 
                     keepAlive();
-                    logger.info("Discord Java Wrapper is ready.");
+                    client.getLogger().atInfo().log("Discord Java Wrapper is ready.");
                     break;
                 }
                 case CHANNEL_CREATE: {
@@ -117,12 +113,13 @@ public class WebSocketClientImpl extends WebSocketClient {
                     break;
                 }
                 default: {
-                    logger.error("Payload event was not recognized. Value: " + type);
+                    client.getLogger().atSevere().log("Payload event was not recognized. Value: %s", type);
                 }
             }
         } catch (Exception exception) {
-            logger.error("A error occurred while reading json from websocket message.");
-            exception.printStackTrace();
+            client.getLogger().atSevere().log(
+                "A error occurred while reading json from websocket message. Value: %s",
+                exception.getMessage());
         }
 
     }
@@ -134,14 +131,15 @@ public class WebSocketClientImpl extends WebSocketClient {
             public void run() {
                 try {
                     while (this.isAlive() && !this.isInterrupted()) {
-                        logger.debug("Connected: " + connected);
-                        logger.debug("Heartbeat interval: " + keepAliveInterval);
+                        client.getLogger().atInfo().log("Connected: %s", connected);
+                        client.getLogger().atInfo().log("Heartbeat interval: %s", keepAliveInterval);
                         Thread.sleep(60000);
                     }
                 } catch (InterruptedException exception) {
-                    exception.printStackTrace();
-
-                    logger.error("The thread Updates has been interrupted");
+                    client.getLogger().atSevere().log(
+                      "The thread Updates has been interrupted. Value: %s",
+                      exception.getMessage()
+                    );
                     System.exit(0);
                 }
             }
@@ -165,9 +163,10 @@ public class WebSocketClientImpl extends WebSocketClient {
                         Thread.sleep(60000);
                     }
                 } catch (Exception exception) {
-                    exception.printStackTrace();
-
-                    logger.error("The thread Heartbeat has been interrupted");
+                    client.getLogger().atSevere().log(
+                      "The thread Heartbeat has been interrupted. Value: %s",
+                      exception.getMessage()
+                    );
                     System.exit(0);
                 }
             }
@@ -180,17 +179,16 @@ public class WebSocketClientImpl extends WebSocketClient {
 
     @Override
     public void onClose(int code, String reason, boolean remote) {
-        logger.error("The connection was closed!");
-        logger.error("By remote? " + remote);
-        logger.error("Reason: " + reason);
-        logger.error("Close code: " + code);
+        client.getLogger().atSevere().log(
+          "The connection was closed! By remote? %s, Reason: %s, Close code: %s",
+          remote, reason, code);
 
         this.connected = false;
     }
 
     @Override
     public void onError(Exception exception) {
-        exception.printStackTrace();
+        client.getLogger().atSevere().log("A error occurred on the WebSocket, value: %s", exception.getMessage());
     }
 
 }
