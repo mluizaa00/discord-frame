@@ -10,5 +10,9 @@ repositories {
 }
 
 dependencies {
+    /*
+    JSON dependencies
+     */
+    implementation 'org.json:json:20201115'
     compile(project(":core"))
 }

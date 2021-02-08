@@ -1,7 +1,8 @@
 package com.luizaprestes.frame.api;
 
 import com.luizaprestes.frame.Frame;
-import com.luizaprestes.frame.entities.user.model.OnlineStatus;
+import com.luizaprestes.frame.enums.OnlineStatus;
+import com.luizaprestes.frame.utils.Configuration;
 import lombok.Getter;
 import lombok.Setter;
 import org.jetbrains.annotations.NotNull;
@@ -10,29 +11,24 @@ import org.jetbrains.annotations.NotNull;
 public abstract class ClientFrame implements FrameLoader {
 
     private Frame frame;
+    private Configuration config;
 
     @Setter
     public OnlineStatus status;
 
     public void setToken(@NotNull String token) {
         this.frame = new Frame(token);
+        this.config = frame.getConfiguration();
     }
 
     public void build() {
-        if (!frame.getWebSocketClient().isConnected()) {
-            frame.getWebSocketClient().connect();
-        } else {
-            frame.getLogger().atWarning().log("The Discord-Frame is already connected!");
-        }
+        if (!frame.connect()) frame.getLogger().atWarning().log("The Discord-Frame is already connected!");
     }
 
     public void shutdown() {
-        if (frame.getWebSocketClient().isConnected()) {
-            frame.getWebSocketClient().close();
-        } else {
-            frame.getLogger().atWarning().log("The Discord-Frame is already disconnected!");
-        }
+        if (!frame.shutdown()) frame.getLogger().atWarning().log("The Discord-Frame is already disconnected!");
     }
+
 
     public void registerEvents(Object... holders) {
         frame.getEventLoader().loadEvents(holders);

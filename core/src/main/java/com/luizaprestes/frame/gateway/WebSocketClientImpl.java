@@ -1,13 +1,13 @@
 package com.luizaprestes.frame.gateway;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.node.ObjectNode;
 import com.luizaprestes.frame.Frame;
 import com.luizaprestes.frame.gateway.payload.OpCode;
-import com.luizaprestes.frame.handler.impl.ReadyHandler;
-import com.luizaprestes.frame.handler.impl.channel.ChannelCreateHandler;
+import com.luizaprestes.frame.handlers.impl.ReadyHandler;
+import com.luizaprestes.frame.handlers.impl.channel.ChannelCreateHandler;
 import com.luizaprestes.frame.utils.Constants;
+import com.luizaprestes.frame.utils.JacksonAdapter;
 import lombok.Getter;
 import org.java_websocket.client.WebSocketClient;
 import org.java_websocket.handshake.ServerHandshake;
@@ -30,27 +30,27 @@ public class WebSocketClientImpl extends WebSocketClient {
 
     private final Frame client;
 
-    private final ObjectMapper map;
+    private final JacksonAdapter adapter;
 
     public WebSocketClientImpl(String url, @NotNull Frame client) {
         super(URI.create(url));
 
         this.client = client;
-        this.map = client.getMapper();
+        this.adapter = client.getJacksonAdapter();
     }
 
     @Override
     public void onOpen(ServerHandshake handshake) {
-        final ObjectNode propertiesPayload = map.createObjectNode()
+        final ObjectNode propertiesPayload = adapter.createNode()
           .put("$os", System.getProperty("os.name"))
           .put("$browser", Constants.PROJECT_NAME)
           .put("$device", Constants.PROJECT_NAME);
 
-        final ObjectNode presencePayload = map.createObjectNode()
+        final ObjectNode presencePayload = adapter.createNode()
           .put("status", client.getOnlineStatus().getKey())
           .put("afk", false);
 
-        final ObjectNode infoPayload = map.createObjectNode()
+        final ObjectNode infoPayload = adapter.createNode()
           .put("token", client.getToken())
           .put("intents", 513)
           .set("properties", propertiesPayload);
@@ -58,13 +58,14 @@ public class WebSocketClientImpl extends WebSocketClient {
           .put("v", 8)
           .set("presence", presencePayload);
 
-        final ObjectNode connectPayload = map.createObjectNode()
+        final ObjectNode connectPayload = adapter.createNode()
           .put("op", OpCode.IDENTIFY.getCode())
           .set("d", infoPayload);
 
         try {
-            send(map.writeValueAsString(connectPayload));
+            send(adapter.toJson(connectPayload));
             this.connected = true;
+            client.setConnected(true);
 
             sendUpdates();
         } catch (JsonProcessingException exception) {
@@ -75,28 +76,28 @@ public class WebSocketClientImpl extends WebSocketClient {
     @Override
     public void onMessage(String context) {
         try {
-            final ObjectNode content = map.readValue(context, ObjectNode.class);
+            final ObjectNode content = adapter.getNode(context);
+            final ObjectNode insideContent = adapter.getNode(adapter.getString(content, "d"));
 
-            final int opCode = content.get("op").intValue();
+            final int opCode = adapter.getInt(content, "op");
             if (opCode == OpCode.HELLO.getCode()) {
-                this.keepAliveInterval = content.get("d").get("heartbeat_interval").asLong();
+                this.keepAliveInterval = adapter.getLong(insideContent, "heartbeat_interval");
             }
 
             String type = null;
             if (opCode == OpCode.DISPATCH.getCode()) {
-                type = content.get("t").textValue();
+                type = adapter.getString(content, "t");
             }
 
             if (opCode == OpCode.RECONNECT.getCode()) {
                 this.reconnect();
             }
 
-            final int responseNumber = content.get("s").asInt();
-            final String value = content.get("d").toPrettyString();
+            final int responseNumber = adapter.getInt(content, "s");
+            final String value = adapter.toJson(insideContent);
             if (type != null) switch (type) {
                 case READY: {
-                    new ReadyHandler(client, responseNumber, client.getEntityBuilder())
-                      .handle(value);
+                    new ReadyHandler(client, responseNumber, client.getEntityBuilder()).handle(value);
 
                     keepAlive();
                     client.setStatus(Status.READY);
@@ -118,7 +119,8 @@ public class WebSocketClientImpl extends WebSocketClient {
         } catch (Exception exception) {
             client.getLogger().atSevere().log(
                 "A error occurred while reading json from websocket message. Value: %s",
-                exception.getMessage());
+                exception.getMessage()
+            );
         }
 
     }
@@ -129,16 +131,19 @@ public class WebSocketClientImpl extends WebSocketClient {
             @Override
             public void run() {
                 try {
+
                     while (this.isAlive() && !this.isInterrupted()) {
                         client.getLogger().atInfo().log("Connected: %s", connected);
                         client.getLogger().atInfo().log("Heartbeat interval: %s", keepAliveInterval);
                         Thread.sleep(60000);
                     }
+
                 } catch (InterruptedException exception) {
                     client.getLogger().atSevere().log(
                       "The thread Updates has been interrupted. Value: %s",
                       exception.getMessage()
                     );
+
                     System.exit(0);
                     client.setStatus(Status.OFFLINE);
                 }
@@ -154,19 +159,22 @@ public class WebSocketClientImpl extends WebSocketClient {
             @Override
             public void run() {
                 try {
+
                     while (this.isAlive() && !this.isInterrupted()) {
-                        final ObjectNode heartbeatPayload = map.createObjectNode()
+                        final ObjectNode heartbeatPayload = adapter.createNode()
                           .put("op", OpCode.HEARTBEAT.getCode())
                           .put("d", System.currentTimeMillis());
 
-                        send(map.writeValueAsString(heartbeatPayload));
+                        send(adapter.toJson(heartbeatPayload));
                         Thread.sleep(60000);
                     }
+
                 } catch (Exception exception) {
                     client.getLogger().atSevere().log(
                       "The thread Heartbeat has been interrupted. Value: %s",
                       exception.getMessage()
                     );
+
                     System.exit(0);
                     client.setStatus(Status.OFFLINE);
                 }

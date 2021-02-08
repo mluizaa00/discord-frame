@@ -1,6 +1,5 @@
 plugins {
     id 'java'
-    id "com.github.johnrengelman.shadow" version "5.1.0"
 }
 
 group 'com.luizaprestes'
@@ -9,19 +8,18 @@ version '0.0.3-SNAPSHOT'
 repositories {
     mavenCentral()
     mavenLocal()
+
+    maven { url 'https://jitpack.io' }
 }
 
 subprojects {
     afterEvaluate {
         dependencies {
-
             /*
             Lombok dependencies
              */
             compileOnly 'org.projectlombok:lombok:1.18.16'
             annotationProcessor 'org.projectlombok:lombok:1.18.16'
-
-            implementation 'org.json:json:20201115'
         }
     }
 }

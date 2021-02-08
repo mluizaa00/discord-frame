@@ -3,10 +3,10 @@ package com.luizaprestes.frame.command.impl;
 import com.luizaprestes.frame.command.CommandFrame;
 import com.luizaprestes.frame.command.message.MessageType;
 import com.luizaprestes.frame.command.model.CommandModel;
-import com.luizaprestes.frame.entities.guild.model.Permission;
-import com.luizaprestes.frame.entities.guild.model.Role;
-import com.luizaprestes.frame.entities.member.Member;
-import com.luizaprestes.frame.entities.message.Message;
+import com.luizaprestes.frame.entities.Message;
+import com.luizaprestes.frame.entities.guild.Role;
+import com.luizaprestes.frame.enums.Permission;
+import com.luizaprestes.frame.entities.guild.Member;
 
 public class CommandParser {
 
@@ -62,4 +62,5 @@ public class CommandParser {
 
         return false;
     }
+
 }

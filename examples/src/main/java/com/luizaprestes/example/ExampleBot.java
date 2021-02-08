@@ -2,9 +2,7 @@ package com.luizaprestes.example;
 
 import com.luizaprestes.example.listener.ChannelCreateListener;
 import com.luizaprestes.frame.api.ClientFrame;
-import com.luizaprestes.frame.entities.user.model.OnlineStatus;
-
-import static com.luizaprestes.frame.utils.Config.getConfig;
+import com.luizaprestes.frame.enums.OnlineStatus;
 
 /**
  @author luiza

@@ -1,20 +1,28 @@
 package com.luizaprestes.frame.entities.user;
 
 import com.luizaprestes.frame.entities.channel.PrivateChannel;
-import com.luizaprestes.frame.entities.user.model.OnlineStatus;
+import com.luizaprestes.frame.enums.OnlineStatus;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-public interface User {
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @since 12.19.2020
+ */
+@Data
+@RequiredArgsConstructor
+public class User {
 
-    String getId();
+    private final String id;
+    private String username;
 
-    String getUsername();
+    private boolean bot;
 
-    String getAvatarId();
+    private String avatarId;
+    private String avatarURL;
 
-    String getAvatarURL();
-
-    OnlineStatus getStatus();
-
-    PrivateChannel getPrivateChannel();
+    private OnlineStatus status = OnlineStatus.ONLINE;
+    private PrivateChannel privateChannel = null;
 
 }

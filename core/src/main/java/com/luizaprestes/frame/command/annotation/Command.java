@@ -1,6 +1,6 @@
 package com.luizaprestes.frame.command.annotation;
 
-import com.luizaprestes.frame.entities.guild.model.Permission;
+import com.luizaprestes.frame.enums.Permission;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -18,4 +18,5 @@ public @interface Command {
     Permission[] permissions() default {};
 
     long role() default 0;
+
 }

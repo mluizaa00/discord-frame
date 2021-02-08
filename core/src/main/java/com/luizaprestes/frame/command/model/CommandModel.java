@@ -1,7 +1,7 @@
 package com.luizaprestes.frame.command.model;
 
-import com.luizaprestes.frame.entities.guild.model.Permission;
-import com.luizaprestes.frame.entities.message.Message;
+import com.luizaprestes.frame.entities.Message;
+import com.luizaprestes.frame.enums.Permission;
 import lombok.Data;
 @Data
 public abstract class CommandModel {

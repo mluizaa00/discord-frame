@@ -1,8 +1,8 @@
 package com.luizaprestes.frame.event.guild.message;
 
 import com.luizaprestes.frame.Frame;
+import com.luizaprestes.frame.entities.Message;
 import com.luizaprestes.frame.entities.guild.Guild;
-import com.luizaprestes.frame.entities.message.Message;
 import com.luizaprestes.frame.event.guild.GuildEvent;
 import lombok.Getter;
 

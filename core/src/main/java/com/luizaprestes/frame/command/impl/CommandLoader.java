@@ -3,7 +3,7 @@ package com.luizaprestes.frame.command.impl;
 
 import com.luizaprestes.frame.command.annotation.Command;
 import com.luizaprestes.frame.command.model.CommandModel;
-import com.luizaprestes.frame.entities.message.Message;
+import com.luizaprestes.frame.entities.Message;
 
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;

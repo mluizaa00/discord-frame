@@ -24,15 +24,18 @@ public class EventParser {
                 if (!event.getClass().getSimpleName().equals(annotationClass.getSimpleName())) break;
 
                 for (Parameter parameter : method.getParameters()) {
-                    if (annotationClass.equals(parameter.getType())) {
-                        try {
-                            method.invoke(holder);
-                        } catch (IllegalAccessException | InvocationTargetException exception) {
-                            exception.printStackTrace();
-                        }
+                    if (!annotationClass.equals(parameter.getType())) return;
+
+                    try {
+                        method.invoke(holder);
+                    } catch (IllegalAccessException | InvocationTargetException exception) {
+                        exception.printStackTrace();
                     }
+
                 }
+
             }
         }
     }
+
 }

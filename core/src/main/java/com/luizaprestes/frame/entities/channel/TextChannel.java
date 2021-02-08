@@ -1,22 +1,43 @@
 package com.luizaprestes.frame.entities.channel;
 
-import com.luizaprestes.frame.entities.guild.model.Role;
+import com.luizaprestes.frame.entities.Message;
+import com.luizaprestes.frame.entities.guild.Guild;
+import com.luizaprestes.frame.entities.guild.Role;
+import com.luizaprestes.frame.enums.Permission;
+import com.luizaprestes.frame.entities.user.User;
+import com.luizaprestes.frame.registries.WeakRegistry;
+import lombok.Data;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.List;
+/**
+ @author luiza
+ @version-implemented 0.0.1
+ @since 12.19.2020
+ */
+@Data
+public class TextChannel {
 
-public interface TextChannel extends Channel {
+    private String name;
+    private final String id;
+    private String topic;
 
-    String getTopic();
+    private int position;
 
-    boolean isNsfw();
+    private final Guild guild;
 
-    List<Role> getRoles();
+    private boolean nsfw;
 
-    int getPosition();
+    private String lastMessageId;
 
-    default void sendMessage(@NotNull String message) {
-        // TODO
+    private WeakRegistry<String, User> users = new WeakRegistry<>();
+    private WeakRegistry<String, Role> roles = new WeakRegistry<>();
+
+    public Message sendMessage(@NotNull String message) {
+        return null;
+    }
+
+    public boolean hasPermission(User user, Permission permission) {
+        return false;
     }
 
 }
