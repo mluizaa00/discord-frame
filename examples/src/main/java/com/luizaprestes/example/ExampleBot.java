@@ -1,8 +1,8 @@
 package com.luizaprestes.example;
 
 import com.luizaprestes.example.listener.ChannelCreateListener;
-import com.luizaprestes.frame.api.ClientFrame;
-import com.luizaprestes.frame.enums.OnlineStatus;
+import com.luizaprestes.frame.ClientFrame;
+import com.luizaprestes.frame.model.OnlineStatus;
 
 /**
  @author luiza

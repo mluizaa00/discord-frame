@@ -1,10 +1,10 @@
 package com.luizaprestes.example.listener;
 
-import com.luizaprestes.frame.entities.channel.TextChannel;
-import com.luizaprestes.frame.entities.guild.Guild;
-import com.luizaprestes.frame.event.EventAdapter;
-import com.luizaprestes.frame.event.EventType;
-import com.luizaprestes.frame.event.channel.create.TextChannelCreateEvent;
+import com.luizaprestes.frame.model.channel.TextChannel;
+import com.luizaprestes.frame.model.guild.Guild;
+import com.luizaprestes.frame.view.event.EventAdapter;
+import com.luizaprestes.frame.view.event.EventType;
+import com.luizaprestes.frame.view.event.channel.create.TextChannelCreateEvent;
 
 /**
  @author luiza
